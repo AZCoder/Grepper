@@ -1,0 +1,55 @@
+C:\GrepperProj\GrepperView\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.MainUI.resources
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.Properties.Resources.resources
+C:\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\GrepperProj\GrepperView\bin\Debug\GrepperView.exe
+C:\GrepperProj\GrepperView\bin\Debug\GrepperView.pdb
+C:\GrepperProj\GrepperView\bin\Debug\ContextMenu.dll
+C:\GrepperProj\GrepperView\bin\Debug\GrepperLib.dll
+C:\GrepperProj\GrepperView\bin\Debug\ContextMenu.pdb
+C:\GrepperProj\GrepperView\bin\Debug\GrepperLib.pdb
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.exe
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.pdb
+C:\GrepperProj\GrepperView\bin\Debug\GrepperView.exe.manifest
+C:\GrepperProj\GrepperView\bin\Debug\GrepperView.application
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.exe.manifest
+C:\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.application
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\ContextMenu.dll
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\GrepperLib.dll
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\ContextMenu.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\GrepperLib.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.MainUI.resources
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.Properties.Resources.resources
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\Grepper.exe.manifest
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\Grepper.application
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\Grepper.exe
+C:\apps\GrepperProj\GrepperProj\GrepperView\bin\Debug\Grepper.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\Grepper.exe.manifest
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\Grepper.application
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\Grepper.exe
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\Grepper.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.DirectoryBrowser.resources
+C:\apps\GrepperProj\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.ExtensionsUI.resources
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\Grepper.exe.manifest
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\Grepper.application
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\Grepper.exe
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\Grepper.pdb
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\ContextMenu.dll
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\GrepperLib.dll
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\ContextMenu.pdb
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\bin\Debug\GrepperLib.pdb
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.DirectoryBrowser.resources
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.ExtensionsUI.resources
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.MainUI.resources
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GrepperView.Properties.Resources.resources
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\Grepper.exe.manifest
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\Grepper.application
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\Grepper.exe
+C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperView\obj\x86\Debug\Grepper.pdb

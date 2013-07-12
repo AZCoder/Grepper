@@ -1,0 +1,10 @@
+C:\GrepperProj\GrepperLib\bin\Release\GrepperLib.dll
+C:\GrepperProj\GrepperLib\bin\Release\GrepperLib.pdb
+C:\GrepperProj\GrepperLib\obj\Release\ResolveAssemblyReference.cache
+C:\GrepperProj\GrepperLib\obj\Release\GrepperLib.dll
+C:\GrepperProj\GrepperLib\obj\Release\GrepperLib.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperLib\bin\Release\GrepperLib.dll
+C:\apps\GrepperProj\GrepperProj\GrepperLib\bin\Release\GrepperLib.pdb
+C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\ResolveAssemblyReference.cache
+C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\GrepperLib.dll
+C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\GrepperLib.pdb

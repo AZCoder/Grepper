@@ -1,0 +1,10 @@
+C:\GrepperProj\ContextMenu\bin\Release\ContextMenu.dll
+C:\GrepperProj\ContextMenu\bin\Release\ContextMenu.pdb
+C:\GrepperProj\ContextMenu\obj\Release\ResolveAssemblyReference.cache
+C:\GrepperProj\ContextMenu\obj\Release\ContextMenu.dll
+C:\GrepperProj\ContextMenu\obj\Release\ContextMenu.pdb
+C:\apps\GrepperProj\GrepperProj\ContextMenu\bin\Release\ContextMenu.dll
+C:\apps\GrepperProj\GrepperProj\ContextMenu\bin\Release\ContextMenu.pdb
+C:\apps\GrepperProj\GrepperProj\ContextMenu\obj\Release\ResolveAssemblyReference.cache
+C:\apps\GrepperProj\GrepperProj\ContextMenu\obj\Release\ContextMenu.dll
+C:\apps\GrepperProj\GrepperProj\ContextMenu\obj\Release\ContextMenu.pdb
