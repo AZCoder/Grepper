@@ -59,6 +59,7 @@
     <Compile Include="Controller\FileController.cs" />
     <Compile Include="Model\FileData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\Message.cs" />
     <Compile Include="Utility\StringHelper.cs" />
   </ItemGroup>
   <ItemGroup>

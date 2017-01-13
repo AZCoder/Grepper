@@ -13,3 +13,8 @@ C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperLib\bi
 C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperLib\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperLib\obj\Debug\GrepperLib.dll
 C:\Users\AZCoder\Documents\Visual Studio 2010\Projects\GrepperProj\GrepperLib\obj\Debug\GrepperLib.pdb
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Debug\GrepperLib.dll
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Debug\GrepperLib.pdb
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Debug\GrepperLib.csprojResolveAssemblyReference.cache
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Debug\GrepperLib.dll
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Debug\GrepperLib.pdb

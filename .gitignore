@@ -3,3 +3,12 @@
 ################################################################################
 
 /.vs/Grepper/v15
+/ContextMenu/bin
+*.dll
+*.pdb
+/ContextMenu/obj
+/GrepperView/obj/x86
+/GrepperView/bin
+/UpgradeLog.htm
+*.cache
+/.vs/config

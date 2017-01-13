@@ -8,3 +8,7 @@ C:\apps\GrepperProj\GrepperProj\GrepperLib\bin\Release\GrepperLib.pdb
 C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\ResolveAssemblyReference.cache
 C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\GrepperLib.dll
 C:\apps\GrepperProj\GrepperProj\GrepperLib\obj\Release\GrepperLib.pdb
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Release\GrepperLib.dll
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Release\GrepperLib.pdb
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Release\GrepperLib.dll
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Release\GrepperLib.pdb

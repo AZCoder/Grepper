@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Grepper.ContextMenu;
 using GrepperLib.Controller;
 using GrepperLib.Model;
+using UMessage = GrepperLib.Utility;
 
 namespace GrepperView
 {
@@ -55,7 +56,7 @@ namespace GrepperView
         {
             if (this.ClientRectangle.Width > 0 && this.ClientRectangle.Height > 0)
             {
-                using (LinearGradientBrush brush = new LinearGradientBrush(this.ClientRectangle, Color.Black, Color.BlanchedAlmond, 270F))
+                using (LinearGradientBrush brush = new LinearGradientBrush(this.ClientRectangle, Color.Black, Color.LightGreen, 270F))
                 {
                     e.Graphics.FillRectangle(brush, this.ClientRectangle);
                 }
@@ -230,9 +231,9 @@ namespace GrepperView
             FileController fc = (FileController)e.Result;
 
             // display any errors
-            if (fc.MessageList != null)
+            if (UMessage.Message.MessageList != null)
             {
-                foreach (string error in fc.MessageList)
+                foreach (string error in UMessage.Message.MessageList)
                 {
                     ListViewItem item = new ListViewItem(new string[] { error, "Error" });
                     item.ForeColor = Color.Red;
@@ -384,11 +385,11 @@ namespace GrepperView
             }
             catch (InvalidCastException ice)
             {
-                _fileController.MessageList.Add(ice.Message);
+                UMessage.Message.Add(ice.Message);
             }
             catch (UnauthorizedAccessException uae)
             {
-                _fileController.MessageList.Add(uae.Message);
+                UMessage.Message.Add(uae.Message);
             }
         }
 

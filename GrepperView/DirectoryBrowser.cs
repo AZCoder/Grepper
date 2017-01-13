@@ -16,13 +16,12 @@ namespace GrepperView
     {
         private string _startDirectory;
 
-        public List<string> DirectoryList
-        { get; set; }
         public string NodeSelected
         { 
             get;
             set;
         }
+
         public string StartDirectory
         {
             get
@@ -89,6 +88,7 @@ namespace GrepperView
             {
                 DriveLetter = string.Format("{0}\\", directories[0]);
                 TreeNode tn = new TreeNode();
+                tn.Text = rootDirectory;
                 PopulateTree(DriveLetter, tn);
                 tvDirectoryTree.Nodes.Add(tn);
                 tvDirectoryTree.ExpandAll();

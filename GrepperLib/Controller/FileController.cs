@@ -53,9 +53,7 @@ namespace GrepperLib.Controller
         public bool MatchPhrase { get; set; }
 
         public bool LiteralSearch { get; set; }
-
-        public IList<string> MessageList { get; private set; }
-
+        
         public string SearchCriteria { get; set; }
 
         public int TotalMatches
@@ -86,7 +84,7 @@ namespace GrepperLib.Controller
             RecursiveSearch = true;
             MatchCase = false;
             MatchPhrase = false;
-            MessageList = new List<string>();
+            Message.Clear();
             _fileDataList = new List<FileData>();
         }
 
@@ -99,13 +97,13 @@ namespace GrepperLib.Controller
         /// <param name="criteria">criteria to search</param>
         public void GenerateFileData()
         {
-            MessageList = new List<string>();
+            Message.Clear();
 
             // if no criteria or no file extensions or no base path, there is no way data can be generated
-            if (string.IsNullOrEmpty(SearchCriteria)) MessageList.Add("No search criteria provided.");
-            if (string.IsNullOrEmpty(FileExtensions)) MessageList.Add("No file extensions provided.");
-            if (string.IsNullOrEmpty(BaseSearchPath)) MessageList.Add("No search path provided.");
-            if (MessageList.Count > 0) return;
+            if (string.IsNullOrEmpty(SearchCriteria)) Message.Add("No search criteria provided.");
+            if (string.IsNullOrEmpty(FileExtensions)) Message.Add("No file extensions provided.");
+            if (string.IsNullOrEmpty(BaseSearchPath)) Message.Add("No search path provided.");
+            if (Message.MessageList.Count > 0) return;
 
             _fileDataList = new List<FileData>();
             _fileExtensionList = new List<string>();
@@ -120,15 +118,15 @@ namespace GrepperLib.Controller
                 }
                 catch (PathTooLongException ptle)
                 {
-                    MessageList.Add(ptle.Message);
+                    Message.Add(ptle.Message);
                 }
                 catch (IOException ioe)
                 {
-                    MessageList.Add(ioe.Message);
+                    Message.Add(ioe.Message);
                 }
                 catch (UnauthorizedAccessException uax)
                 {
-                    MessageList.Add(uax.Message);
+                    Message.Add(uax.Message);
                 }
             }
         }

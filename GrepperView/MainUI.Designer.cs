@@ -81,7 +81,7 @@
             // 
             this.cbxMatchCase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMatchCase.AutoSize = true;
-            this.cbxMatchCase.Location = new System.Drawing.Point(21, 12);
+            this.cbxMatchCase.Location = new System.Drawing.Point(12, 12);
             this.cbxMatchCase.Name = "cbxMatchCase";
             this.cbxMatchCase.Size = new System.Drawing.Size(83, 17);
             this.cbxMatchCase.TabIndex = 4;
@@ -92,7 +92,7 @@
             // 
             this.cbxMatchPhrase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cbxMatchPhrase.AutoSize = true;
-            this.cbxMatchPhrase.Location = new System.Drawing.Point(119, 12);
+            this.cbxMatchPhrase.Location = new System.Drawing.Point(110, 11);
             this.cbxMatchPhrase.Name = "cbxMatchPhrase";
             this.cbxMatchPhrase.Size = new System.Drawing.Size(92, 17);
             this.cbxMatchPhrase.TabIndex = 5;
@@ -104,7 +104,7 @@
             this.rbLiteral.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbLiteral.AutoSize = true;
             this.rbLiteral.Checked = true;
-            this.rbLiteral.Location = new System.Drawing.Point(119, 43);
+            this.rbLiteral.Location = new System.Drawing.Point(12, 41);
             this.rbLiteral.Name = "rbLiteral";
             this.rbLiteral.Size = new System.Drawing.Size(90, 17);
             this.rbLiteral.TabIndex = 7;
@@ -116,7 +116,7 @@
             // 
             this.rbRegular.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rbRegular.AutoSize = true;
-            this.rbRegular.Location = new System.Drawing.Point(217, 43);
+            this.rbRegular.Location = new System.Drawing.Point(110, 41);
             this.rbRegular.Name = "rbRegular";
             this.rbRegular.Size = new System.Drawing.Size(116, 17);
             this.rbRegular.TabIndex = 8;
@@ -126,7 +126,7 @@
             // btnSearch
             // 
             this.btnSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSearch.Location = new System.Drawing.Point(258, 74);
+            this.btnSearch.Location = new System.Drawing.Point(9, 71);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 9;
@@ -136,7 +136,7 @@
             // 
             // txtBaseSearchPath
             // 
-            this.txtBaseSearchPath.Location = new System.Drawing.Point(110, 41);
+            this.txtBaseSearchPath.Location = new System.Drawing.Point(110, 44);
             this.txtBaseSearchPath.Name = "txtBaseSearchPath";
             this.txtBaseSearchPath.Size = new System.Drawing.Size(507, 20);
             this.txtBaseSearchPath.TabIndex = 2;
@@ -146,7 +146,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(10, 44);
+            this.label3.Location = new System.Drawing.Point(10, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(96, 13);
             this.label3.TabIndex = 11;
@@ -156,8 +156,8 @@
             // 
             this.lblMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMessages.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblMessages.Location = new System.Drawing.Point(9, 74);
+            this.lblMessages.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblMessages.Location = new System.Drawing.Point(90, 74);
             this.lblMessages.Name = "lblMessages";
             this.lblMessages.Size = new System.Drawing.Size(243, 23);
             this.lblMessages.TabIndex = 13;
@@ -181,7 +181,7 @@
             // colFilePath
             // 
             this.colFilePath.Text = "File Path";
-            this.colFilePath.Width = 550;
+            this.colFilePath.Width = 874;
             // 
             // colMatchCount
             // 
@@ -218,9 +218,9 @@
             // progressBar
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(21, 40);
+            this.progressBar.Location = new System.Drawing.Point(232, 40);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(92, 23);
+            this.progressBar.Size = new System.Drawing.Size(101, 23);
             this.progressBar.TabIndex = 18;
             this.progressBar.Visible = false;
             // 
