@@ -9,8 +9,6 @@ namespace GrepperLib.Model
     /// </summary>
     public class FileData
     {
-        #region Public Properties______
-
         public string FileName { get; set; }
 
         public string FilePath { get; set; }
@@ -18,9 +16,7 @@ namespace GrepperLib.Model
         public string FileExtension { get; set; }
 
         /// <summary>
-        /// Read-only property for the LineDataList. Data
-        /// must be set through the separate method with the line
-        /// number and data both provided.
+        /// List of line numbers and the corresponding matching text for that line contained within this file.
         /// </summary>
         public IDictionary<long, string> LineDataList
         {
@@ -28,10 +24,12 @@ namespace GrepperLib.Model
             protected set;
         }
 
-        #endregion
-        #region Constructors___________
-
         public FileData() { }
+
+        public bool IsValid()
+        {
+            return (LineDataList != null && LineDataList.Count > 0);
+        }
 
         public FileData(string fileName, string filePath, string fileExtension)
         {
@@ -40,9 +38,6 @@ namespace GrepperLib.Model
             FileExtension = fileExtension;
         }
 
-        #endregion
-        #region Public Methods_________
-        
         /// <summary>
         /// Adds a line of data for this file object consisting of both the
         /// line number and the representative data.
@@ -54,7 +49,5 @@ namespace GrepperLib.Model
             if (LineDataList == null) LineDataList = new Dictionary<long, string>();
             LineDataList.Add(lineNumber, lineData.Trim());
         }
-        
-        #endregion
     }
 }

@@ -132,7 +132,7 @@
             this.btnSearch.TabIndex = 9;
             this.btnSearch.Text = "Search";
             this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnSearch.Click += new System.EventHandler(this.Search_Click);
             // 
             // txtBaseSearchPath
             // 
@@ -140,7 +140,7 @@
             this.txtBaseSearchPath.Name = "txtBaseSearchPath";
             this.txtBaseSearchPath.Size = new System.Drawing.Size(507, 20);
             this.txtBaseSearchPath.TabIndex = 2;
-            this.txtBaseSearchPath.Click += new System.EventHandler(this.txtBaseSearchPath_Click);
+            this.txtBaseSearchPath.Click += new System.EventHandler(this.BaseSearchPath_Click);
             // 
             // label3
             // 
@@ -175,8 +175,8 @@
             this.lvwFileMatches.TabIndex = 10;
             this.lvwFileMatches.UseCompatibleStateImageBehavior = false;
             this.lvwFileMatches.View = System.Windows.Forms.View.Details;
-            this.lvwFileMatches.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvwFileMatches_MouseClick);
-            this.lvwFileMatches.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvwFileMatches_MouseDoubleClick);
+            this.lvwFileMatches.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FileMatches_MouseClick);
+            this.lvwFileMatches.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.FileMatches_MouseDoubleClick);
             // 
             // colFilePath
             // 
@@ -203,7 +203,7 @@
             this.lvwLineData.TabIndex = 11;
             this.lvwLineData.UseCompatibleStateImageBehavior = false;
             this.lvwLineData.View = System.Windows.Forms.View.Details;
-            this.lvwLineData.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvwLineData_MouseClick);
+            this.lvwLineData.MouseClick += new System.Windows.Forms.MouseEventHandler(this.LineData_MouseClick);
             // 
             // lineNumber
             // 
@@ -227,7 +227,7 @@
             // timeCounter
             // 
             this.timeCounter.Interval = 500;
-            this.timeCounter.Tick += new System.EventHandler(this.timeCounter_Tick);
+            this.timeCounter.Tick += new System.EventHandler(this.TimeCounter_Tick);
             // 
             // panel1
             // 
@@ -266,7 +266,7 @@
             this.lnkExtensions.TabIndex = 21;
             this.lnkExtensions.TabStop = true;
             this.lnkExtensions.Text = "File Extensions to Search:";
-            this.lnkExtensions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkExtensions_LinkClicked);
+            this.lnkExtensions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Extensions_LinkClicked);
             // 
             // ddlSearchCriteria
             // 

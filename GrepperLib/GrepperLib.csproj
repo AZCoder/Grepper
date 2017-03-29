@@ -57,10 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\FileController.cs" />
+    <Compile Include="Domain\ISearchFile.cs" />
+    <Compile Include="Domain\SearchFile.cs" />
     <Compile Include="Model\FileData.cs" />
+    <Compile Include="Model\Search.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\FileExtension.cs" />
     <Compile Include="Utility\Message.cs" />
-    <Compile Include="Utility\StringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -84,6 +87,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

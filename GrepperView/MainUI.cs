@@ -80,7 +80,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void lvwFileMatches_MouseDoubleClick(object sender, MouseEventArgs e)
+        protected void FileMatches_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             string itemSelected = lvwFileMatches.SelectedItems[0].Text;
             var fileMatch = from match in _fileController.FileDataList
@@ -99,7 +99,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void timeCounter_Tick(object sender, EventArgs e)
+        protected void TimeCounter_Tick(object sender, EventArgs e)
         {
             // reset to 0 if max reached, only need to show user that program is doing something and not frozen
             if (progressBar.Step >= progressBar.Maximum) progressBar.Step = 0;
@@ -109,7 +109,7 @@ namespace GrepperView
         /// <summary>
         /// Right-click will copy contents to clipboard.
         /// </summary>
-        protected void lvwLineData_MouseClick(object sender, MouseEventArgs e)
+        protected void LineData_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -125,10 +125,13 @@ namespace GrepperView
         /// <summary>
         /// Clicking the search path pulls up a custom directory dialog box.
         /// </summary>
-        protected void txtBaseSearchPath_Click(object sender, EventArgs e)
+        protected void BaseSearchPath_Click(object sender, EventArgs e)
         {
-            DirectoryBrowser db = new DirectoryBrowser();
-            db.StartDirectory = txtBaseSearchPath.Text.Trim();
+            DirectoryBrowser db = new DirectoryBrowser()
+            {
+                StartDirectory = txtBaseSearchPath.Text.Trim()
+            };
+
             if (db.ShowDialog() == DialogResult.OK)
             {
                 txtBaseSearchPath.Text = db.NodeSelected;
@@ -140,7 +143,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected void lvwFileMatches_MouseClick(object sender, MouseEventArgs e)
+        protected void FileMatches_MouseClick(object sender, MouseEventArgs e)
         {
             lvwLineData.Items.Clear();
             string itemSelected = lvwFileMatches.SelectedItems[0].Text;
@@ -158,7 +161,7 @@ namespace GrepperView
             SetAlternateRowColor(lvwLineData);
         }
 
-        protected void lnkExtensions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        protected void Extensions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ExtensionsUI extensions = new ExtensionsUI();
             extensions.ShowDialog();
@@ -188,7 +191,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void Search_Click(object sender, EventArgs e)
         {
             // clear out any messages
             lblMessages.Text = string.Empty;
@@ -199,17 +202,17 @@ namespace GrepperView
             SaveCurrentSettings();
 
             _fileController.SearchCriteria = ddlSearchCriteria.Text.Trim();
-            _fileController.MatchCase = cbxMatchCase.Checked;
-            _fileController.MatchPhrase = cbxMatchPhrase.Checked;
-            _fileController.FileExtensions = ddlFileExtensions.Text;
+            _fileController.IsMatchCase = cbxMatchCase.Checked;
+            _fileController.DoMatchPhrase = cbxMatchPhrase.Checked;
             _fileController.RecursiveSearch = cbxRecursive.Checked;
-            _fileController.BaseSearchPath = txtBaseSearchPath.Text;
-            _fileController.LiteralSearch = rbLiteral.Checked;
+            _fileController.SetBaseSearchPath(txtBaseSearchPath.Text);
+            _fileController.IsLiteralSearch = rbLiteral.Checked;
+            _fileController.LoadFileExtensionsFromString(ddlFileExtensions.Text);
 
             // create background worker thread to perform search so that UI does not lock up
             workerThread = new BackgroundWorker();
-            workerThread.DoWork += workerThread_DoWork;
-            workerThread.RunWorkerCompleted += workerThread_RunWorkerCompleted;
+            workerThread.DoWork += WorkerThread_DoWork;
+            workerThread.RunWorkerCompleted += WorkerThread_RunWorkerCompleted;
 
             // set & enable progressBar & timer
             progressBar.Visible = true;
@@ -225,7 +228,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void workerThread_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void WorkerThread_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // obtain results from worker thread and update UI as necessary
             FileController fc = (FileController)e.Result;
@@ -235,8 +238,11 @@ namespace GrepperView
             {
                 foreach (string error in UMessage.Message.MessageList)
                 {
-                    ListViewItem item = new ListViewItem(new string[] { error, "Error" });
-                    item.ForeColor = Color.Red;
+                    ListViewItem item = new ListViewItem(new string[] { error, "Error" })
+                    {
+                        ForeColor = Color.Red
+                    };
+
                     lvwFileMatches.Items.Add(item);
                 }
             }
@@ -276,7 +282,7 @@ namespace GrepperView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void workerThread_DoWork(object sender, DoWorkEventArgs e)
+        private void WorkerThread_DoWork(object sender, DoWorkEventArgs e)
         {
             FileController fc = (FileController)e.Argument;
             fc.GenerateFileData();
