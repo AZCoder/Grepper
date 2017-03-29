@@ -45,8 +45,8 @@
             this.tvDirectoryTree.Name = "tvDirectoryTree";
             this.tvDirectoryTree.Size = new System.Drawing.Size(416, 458);
             this.tvDirectoryTree.TabIndex = 0;
-            this.tvDirectoryTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvDirectoryTree_NodeMouseClick);
-            this.tvDirectoryTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvDirectoryTree_NodeMouseDoubleClick);
+            this.tvDirectoryTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DirectoryTree_NodeMouseClick);
+            this.tvDirectoryTree.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.DirectoryTree_NodeMouseDoubleClick);
             // 
             // panel1
             // 
@@ -68,7 +68,7 @@
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "&Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            this.btnCancel.Click += new System.EventHandler(this.Cancel_Click);
             // 
             // btnOK
             // 
@@ -78,7 +78,7 @@
             this.btnOK.TabIndex = 0;
             this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
-            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            this.btnOK.Click += new System.EventHandler(this.OK_Click);
             // 
             // DirectoryBrowser
             // 

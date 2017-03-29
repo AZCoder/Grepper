@@ -54,11 +54,11 @@ namespace GrepperView
         /// <param name="e">PaintEventArgs</param>
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            if (this.ClientRectangle.Width > 0 && this.ClientRectangle.Height > 0)
+            if (ClientRectangle.Width > 0 && ClientRectangle.Height > 0)
             {
-                using (LinearGradientBrush brush = new LinearGradientBrush(this.ClientRectangle, Color.Black, Color.LightGreen, 270F))
+                using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.Black, Color.LightGreen, 270F))
                 {
-                    e.Graphics.FillRectangle(brush, this.ClientRectangle);
+                    e.Graphics.FillRectangle(brush, ClientRectangle);
                 }
             }
             else
@@ -72,7 +72,7 @@ namespace GrepperView
         /// </summary>
         protected void MainUI_Resize(object sender, EventArgs e)
         {
-            this.Invalidate();
+            Invalidate();
         }
 
         /// <summary>
@@ -87,7 +87,9 @@ namespace GrepperView
                             where match.FilePath == itemSelected
                             select match;
 
-            if (fileMatch == null || fileMatch.Count() < 1) return;
+            if (fileMatch == null || fileMatch.Count() < 1)
+                return;
+
             using (Process proc = new Process() { StartInfo = new ProcessStartInfo(fileMatch.First().FilePath) })
             {
                 proc.Start();
@@ -102,7 +104,9 @@ namespace GrepperView
         protected void TimeCounter_Tick(object sender, EventArgs e)
         {
             // reset to 0 if max reached, only need to show user that program is doing something and not frozen
-            if (progressBar.Step >= progressBar.Maximum) progressBar.Step = 0;
+            if (progressBar.Step >= progressBar.Maximum)
+                progressBar.Step = 0;
+
             progressBar.PerformStep();
         }
 
@@ -113,12 +117,7 @@ namespace GrepperView
         {
             if (e.Button == MouseButtons.Right)
             {
-                string itemSelected = string.Empty;
-                if ((lvwLineData.SelectedItems.Count > 0) && (lvwLineData.SelectedItems[0].SubItems.Count > 1))
-                    itemSelected = lvwLineData.SelectedItems[0].SubItems[1].Text;
-
-                if (itemSelected != null) Clipboard.SetText(itemSelected);
-                lblMessages.Text = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+                CopyToClipboard();
             }
         }
 
@@ -170,6 +169,18 @@ namespace GrepperView
 
         #endregion
         #region Private Methods________
+
+        private void CopyToClipboard()
+        {
+            string itemSelected = string.Empty;
+            if ((lvwLineData.SelectedItems.Count > 0) && (lvwLineData.SelectedItems[0].SubItems.Count > 1))
+                itemSelected = lvwLineData.SelectedItems[0].SubItems[1].Text;
+
+            if (!string.IsNullOrEmpty(itemSelected))
+                Clipboard.SetText(itemSelected);
+
+            lblMessages.Text = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+        }
 
         /// <summary>
         /// Sets the popup tips for given controls when mouse hovers over them.
@@ -236,20 +247,12 @@ namespace GrepperView
             // display any errors
             if (UMessage.Message.MessageList != null)
             {
-                foreach (string error in UMessage.Message.MessageList)
-                {
-                    ListViewItem item = new ListViewItem(new string[] { error, "Error" })
-                    {
-                        ForeColor = Color.Red
-                    };
-
-                    lvwFileMatches.Items.Add(item);
-                }
+                DisplayMessages();
             }
+
             // set total results
             lblMessages.Visible = true;
             string matches = fc.TotalMatches == 1 ? "" : "es";
-            
 
             // display message if no results found
             if (fc.FileDataList == null || fc.FileDataList.Count < 1)
@@ -275,6 +278,19 @@ namespace GrepperView
             SetAlternateRowColor(lvwFileMatches);
             progressBar.Visible = false;
             timeCounter.Enabled = false;
+        }
+
+        private void DisplayMessages()
+        {
+            foreach (string error in UMessage.Message.MessageList)
+            {
+                ListViewItem item = new ListViewItem(new string[] { error, "Error" })
+                {
+                    ForeColor = Color.Red
+                };
+
+                lvwFileMatches.Items.Add(item);
+            }
         }
 
         /// <summary>

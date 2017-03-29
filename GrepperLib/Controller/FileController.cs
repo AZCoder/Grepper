@@ -92,15 +92,14 @@ namespace GrepperLib.Controller
             {
                 if (FileDataList == null)
                     return 0;
-                else
+
+                int count = 0;
+                for (int i = 0; i < FileDataList.Count; i++)
                 {
-                    int count = 0;
-                    foreach (FileData fd in FileDataList)
-                    {
-                        count += fd.LineDataList.Count;
-                    }
-                    return count;
+                    count += FileDataList[i].LineDataList.Count;
                 }
+
+                return count;
             }
         }
 
@@ -129,7 +128,8 @@ namespace GrepperLib.Controller
         {
             // if no criteria or no file extensions or no base path, there is no way data can be generated
             ValidateFormCriteria();
-            if (Message.MessageList.Count > 0) return;
+            if (Message.MessageList.Count > 0)
+                return;
 
             try
             {

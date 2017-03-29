@@ -43,7 +43,7 @@
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnClose.Click += new System.EventHandler(this.Close_Click);
             // 
             // lblSavedExtensions
             // 
@@ -70,7 +70,7 @@
             this.btnDelete.TabIndex = 3;
             this.btnDelete.Text = "Delete Item";
             this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.btnDelete.Click += new System.EventHandler(this.Delete_Click);
             // 
             // ExtensionsUI
             // 

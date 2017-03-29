@@ -8,9 +8,19 @@ using GrepperLib.Utility;
 
 namespace GrepperLib.Domain
 {
+    public enum SearchType
+    {
+        RegEx,
+        GeneralMatch,
+        ExactMatch
+    }
+
     public class SearchFile : ISearchFile
     {
         private List<FileData> _fileData;
+        private RegexOptions _regOptions;
+        Func<Search, string, bool> IsSearchFunc;
+
         public SearchFile()
         {
             _fileData = new List<FileData>();
@@ -20,8 +30,18 @@ namespace GrepperLib.Domain
         {
             if (search == null)
                 throw new ArgumentNullException();
-            
+
             return FileSearch(search);
+        }
+
+        private SearchType GetSearchType(Search search)
+        {
+            if (search.DoMatchPhrase)
+                return SearchType.ExactMatch;
+            else if (search.IsLiteralSearch)
+                return SearchType.GeneralMatch;
+            else
+                return SearchType.RegEx;
         }
 
         private IList<FileData> FileSearch(Search search)
@@ -48,8 +68,6 @@ namespace GrepperLib.Domain
             }
         }
 
-        public delegate bool IsSearchSuccessful(Search search, string line);
-
         private FileData GetFileData(Search search, string file, string extension)
         {
             var fileData = new FileData(file.Substring(file.LastIndexOf('\\') + 1), file.Trim(), extension);
@@ -58,59 +76,46 @@ namespace GrepperLib.Domain
                 string line;
                 string originalLine; // saves the letter casing
                 uint lineNumber = 1;
-                IsSearchSuccessful isSearch;
+
+                _regOptions = (search.DoMatchCase) ? RegexOptions.None : RegexOptions.IgnoreCase;
+
+                SearchType searchType = GetSearchType(search);
+                IsSearchFunc = FindByLiteral;
+                if (searchType == SearchType.RegEx)
+                    IsSearchFunc = FindByRegEx;
+                if (searchType == SearchType.ExactMatch)
+                    IsSearchFunc = FindByExact;
 
                 while ((line = sr.ReadLine()) != null)
                 {
                     originalLine = line;
-                    if (!search.DoMatchCase) line = line.ToLower();
+                    if (!search.DoMatchCase)
+                        line = line.ToLower();
 
-                    if (search.IsLiteralSearch)
-                    {
-                        if (search.DoMatchPhrase)
-                        {
-                            // criteria to find search pattern that ignores certain boundaries
-                            string phrase = string.Format(@"(\b)({0}+(\b|\n|\s))", search.SearchTerm);
-
-                            RegexOptions regOptions = (search.DoMatchCase) ? RegexOptions.None : RegexOptions.IgnoreCase;
-                            if (Regex.IsMatch(line, phrase, regOptions))
-                            {
-                                fileData.SetLineData(lineNumber, originalLine);
-                            }
-                        }
-                        else
-                        {
-                            if (line.Contains(search.SearchTerm))
-                            {
-                                fileData.SetLineData(lineNumber, originalLine);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isSearch = new IsSearchSuccessful(FindByRegEx);
-                        var b = isSearch(search, line);
-
-                        // pattern treated as REGEX
-                        RegexOptions regOptions = (search.DoMatchCase) ? RegexOptions.None : RegexOptions.IgnoreCase;
-                        if (Regex.IsMatch(line, search.SearchTerm, regOptions))
-                        {
-                            fileData.SetLineData(lineNumber, originalLine);
-                        }
-                    }
+                    if (IsSearchFunc.Invoke(search, line))
+                        fileData.SetLineData(lineNumber, originalLine);
 
                     lineNumber++;
                 }
             }
-
-
+            
             return fileData;
         }
 
         private bool FindByRegEx(Search search, string line)
         {
-            RegexOptions regOptions = (search.DoMatchCase) ? RegexOptions.None : RegexOptions.IgnoreCase;
-            return Regex.IsMatch(line, search.SearchTerm, regOptions);
+            return Regex.IsMatch(line, search.SearchTerm, _regOptions);
+        }
+
+        private bool FindByLiteral(Search search, string line)
+        {
+            string phrase = string.Format(@"(\b)({0}+(\b|\n|\s))", search.SearchTerm);
+            return Regex.IsMatch(line, phrase, _regOptions);
+        }
+
+        private bool FindByExact(Search search, string line)
+        {
+            return line.Contains(search.SearchTerm);
         }
     }
 }

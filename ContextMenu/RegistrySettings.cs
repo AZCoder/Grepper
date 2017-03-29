@@ -6,11 +6,11 @@ namespace Grepper.ContextMenu
 {
     public static class RegistrySettings
     {
-        private static string _grepperPath          = "Folder\\Shell\\Grepper\\";
-        private static string _commandPath          = _grepperPath + "Command";
-        private static string _settingsPath         = _grepperPath + "Settings";
-        private static string _extensionItemPath    = _grepperPath + "Settings\\ExtensionItems";
-        private static string _searchItemPath       = _grepperPath + "Settings\\SearchItems";
+        private static string _grepperPath = "Folder\\Shell\\Grepper\\";
+        private static string _commandPath = _grepperPath + "Command";
+        private static string _settingsPath = _grepperPath + "Settings";
+        private static string _extensionItemPath = _grepperPath + "Settings\\ExtensionItems";
+        private static string _searchItemPath = _grepperPath + "Settings\\SearchItems";
 
         /// <summary>
         /// Adds the right-click context menu to explorer with the Grepper option.
@@ -241,7 +241,7 @@ namespace Grepper.ContextMenu
         {
             RegistryKey key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_extensionItemPath);
-            
+
             var item = from v in key.GetValueNames()
                        where key.GetValue(v.Trim()).ToString() == extension.Trim()
                        select v;

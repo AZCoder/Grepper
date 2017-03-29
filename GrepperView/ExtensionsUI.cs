@@ -15,24 +15,24 @@ namespace GrepperView
         public ExtensionsUI()
         {
             InitializeComponent();
-            this.LoadExtensions();
+            LoadExtensions();
         }
 
-        protected void btnClose_Click(object sender, EventArgs e)
+        protected void Close_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
-        protected void btnDelete_Click(object sender, EventArgs e)
+        protected void Delete_Click(object sender, EventArgs e)
         {
-            if (lbExtensions.SelectedItem != null)
+            if (lbExtensions.SelectedItem == null)
+                return;
+            
+            if (RegistrySettings.DeleteExtensionItem(lbExtensions.SelectedItem.ToString()))
             {
-                if (RegistrySettings.DeleteExtensionItem(lbExtensions.SelectedItem.ToString()))
-                {
-                    // update UI
-                    lbExtensions.Items.Clear();
-                    LoadExtensions();
-                }
+                // update UI
+                lbExtensions.Items.Clear();
+                LoadExtensions();
             }
         }
 

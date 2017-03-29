@@ -117,25 +117,25 @@ namespace GrepperView
             return lastNode;
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void Cancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        private void tvDirectoryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void DirectoryTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             PopulateTree(e.Node.FullPath, e.Node);
             e.Node.ExpandAll();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void OK_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
-        private void tvDirectoryTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void DirectoryTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             NodeSelected = e.Node.Tag != null ? e.Node.Tag.ToString() : DriveLetter;
         }
