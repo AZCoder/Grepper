@@ -143,15 +143,14 @@ namespace GrepperView
         private void DirectoryBrowser_Shown(object sender, EventArgs e)
         {
             TreeNode startNode = FindStartNode();
-            if (startNode != null)
-            {
-                tvDirectoryTree.SelectedNode = startNode;
-                tvDirectoryTree.SelectedNode.ExpandAll();
-                if (startNode.Tag != null)
-                    NodeSelected = startNode.Tag.ToString();
-                else
-                    NodeSelected = DriveLetter;
-            }
+            if (startNode == null)
+                return;
+
+            tvDirectoryTree.SelectedNode = startNode;
+            tvDirectoryTree.SelectedNode.ExpandAll();
+            NodeSelected = DriveLetter;
+            if (startNode.Tag != null)
+                NodeSelected = startNode.Tag.ToString();
         }
     }
 }

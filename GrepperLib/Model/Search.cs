@@ -20,11 +20,17 @@ namespace GrepperLib.Model
             }
             set
             {
-                _baseSearchPath = string.Empty;
-                // match a drive letter pattern only
-                Regex reg = new Regex("^[a-zA-Z][:]{1}");
-                if (reg.IsMatch(value)) _baseSearchPath = value;
+                SetSearchPath(value);
             }
+        }
+
+        private void SetSearchPath(string value)
+        {
+            _baseSearchPath = string.Empty;
+            // match a drive letter pattern only
+            Regex reg = new Regex("^[a-zA-Z][:]{1}");
+            if (reg.IsMatch(value))
+                _baseSearchPath = value;
         }
 
         public FileExtension FileExtensions { get; set; }

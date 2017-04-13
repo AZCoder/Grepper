@@ -12,3 +12,4 @@ C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Release\GrepperLib.dl
 C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\bin\Release\GrepperLib.pdb
 C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Release\GrepperLib.dll
 C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Release\GrepperLib.pdb
+C:\Users\rbottorff\Documents\GitHub\Grepper\GrepperLib\obj\Release\GrepperLib.csprojResolveAssemblyReference.cache

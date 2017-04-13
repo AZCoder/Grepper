@@ -30,7 +30,7 @@
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainUI));
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblSearchCriteria = new System.Windows.Forms.Label();
             this.cbxRecursive = new System.Windows.Forms.CheckBox();
             this.cbxMatchCase = new System.Windows.Forms.CheckBox();
             this.cbxMatchPhrase = new System.Windows.Forms.CheckBox();
@@ -58,13 +58,13 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(10, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(79, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Search Criteria:";
+            this.lblSearchCriteria.AutoSize = true;
+            this.lblSearchCriteria.BackColor = System.Drawing.Color.Transparent;
+            this.lblSearchCriteria.Location = new System.Drawing.Point(10, 15);
+            this.lblSearchCriteria.Name = "label1";
+            this.lblSearchCriteria.Size = new System.Drawing.Size(79, 13);
+            this.lblSearchCriteria.TabIndex = 0;
+            this.lblSearchCriteria.Text = "Search Criteria:";
             // 
             // cbxRecursive
             // 
@@ -292,7 +292,7 @@
             this.Controls.Add(this.lvwFileMatches);
             this.Controls.Add(this.txtBaseSearchPath);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblSearchCriteria);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(988, 600);
@@ -310,7 +310,7 @@
 
 		#endregion
 
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblSearchCriteria;
 		private System.Windows.Forms.CheckBox cbxRecursive;
 		private System.Windows.Forms.CheckBox cbxMatchCase;
 		private System.Windows.Forms.CheckBox cbxMatchPhrase;

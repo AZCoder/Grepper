@@ -54,16 +54,15 @@ namespace GrepperView
         /// <param name="e">PaintEventArgs</param>
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            if (ClientRectangle.Width > 0 && ClientRectangle.Height > 0)
-            {
-                using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.Black, Color.LightGreen, 270F))
-                {
-                    e.Graphics.FillRectangle(brush, ClientRectangle);
-                }
-            }
-            else
+            if (ClientRectangle.Width <= 0 || ClientRectangle.Height <= 0)
             {
                 base.OnPaintBackground(e);
+                return;
+            }
+            
+            using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.Black, Color.LightGreen, 270F))
+            {
+                e.Graphics.FillRectangle(brush, ClientRectangle);
             }
         }
 
@@ -173,13 +172,18 @@ namespace GrepperView
         private void CopyToClipboard()
         {
             string itemSelected = string.Empty;
-            if ((lvwLineData.SelectedItems.Count > 0) && (lvwLineData.SelectedItems[0].SubItems.Count > 1))
+            if (IsLineDataSelectedValid())
                 itemSelected = lvwLineData.SelectedItems[0].SubItems[1].Text;
 
             if (!string.IsNullOrEmpty(itemSelected))
                 Clipboard.SetText(itemSelected);
 
             lblMessages.Text = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+        }
+
+        private bool IsLineDataSelectedValid()
+        {
+            return ((lvwLineData.SelectedItems.Count > 0) && (lvwLineData.SelectedItems[0].SubItems.Count > 1));
         }
 
         /// <summary>
@@ -243,35 +247,16 @@ namespace GrepperView
         {
             // obtain results from worker thread and update UI as necessary
             FileController fc = (FileController)e.Result;
+            if (fc.FileDataList == null)
+                return;
 
             // display any errors
-            if (UMessage.Message.MessageList != null)
-            {
-                DisplayMessages();
-            }
+            DisplayMessages();
+            DisplayResults(fc.FileDataList, fc.TotalMatches);
 
-            // set total results
-            lblMessages.Visible = true;
-            string matches = fc.TotalMatches == 1 ? "" : "es";
-
-            // display message if no results found
-            if (fc.FileDataList == null || fc.FileDataList.Count < 1)
+            foreach (FileData fd in fc.FileDataList)
             {
-                lblMessages.Text = "No results found.";
-            }
-            else
-            {
-                string files = fc.FileDataList.Count == 1 ? "" : "s";
-                lblMessages.Text = string.Format("{0} match{1} in {2} file{3}", fc.TotalMatches, matches, fc.FileDataList.Count, files);
-            }
-
-            if (fc.FileDataList != null)
-            {
-                // display results if any
-                foreach (FileData fd in fc.FileDataList)
-                {
-                    lvwFileMatches.Items.Add(new ListViewItem(new string[] { fd.FilePath, fd.LineDataList.Count.ToString() }));
-                }
+                lvwFileMatches.Items.Add(new ListViewItem(new string[] { fd.FilePath, fd.LineDataList.Count.ToString() }));
             }
 
             // set row colors and disable progressBar & timer
@@ -280,8 +265,25 @@ namespace GrepperView
             timeCounter.Enabled = false;
         }
 
+        private void DisplayResults(IList<FileData> results, int count)
+        {
+            lblMessages.Visible = true;
+            if (results == null || results.Count < 1)
+            {
+                lblMessages.Text = "No results found.";
+                return;
+            }
+            
+            string matches = count == 1 ? "" : "es";
+            string files = results.Count == 1 ? "" : "s";
+            lblMessages.Text = string.Format("{0} match{1} in {2} file{3}", count, matches, results.Count, files);
+        }
+
         private void DisplayMessages()
         {
+            if (UMessage.Message.MessageList == null)
+                return;
+
             foreach (string error in UMessage.Message.MessageList)
             {
                 ListViewItem item = new ListViewItem(new string[] { error, "Error" })

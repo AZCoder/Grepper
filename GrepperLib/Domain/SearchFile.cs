@@ -46,6 +46,7 @@ namespace GrepperLib.Domain
 
         private IList<FileData> FileSearch(Search search)
         {
+            _fileData = new List<FileData>();
             if (!search.DoMatchCase) search.SearchTerm = search.SearchTerm.ToLower();
             SearchOption so = search.IsRecursiveSearch ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
 
