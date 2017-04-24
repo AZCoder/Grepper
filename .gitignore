@@ -2,17 +2,23 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/Grepper/v15
-/ContextMenu/bin
 *.dll
 *.pdb
-/ContextMenu/obj
-/GrepperView/obj/x86
-/GrepperView/bin
-/UpgradeLog.htm
 *.cache
 /.vs/config
-GrepperView/GrepperView.csproj.user
-*.pdb
-GrepperLib/obj/Release/GrepperLib.dll
-*.dll
+*.user
+*.exe
+*.suo
+ContextMenu/obj/Debug/ContextMenu.csproj.FileListAbsolute.txt
+*.manifest
+*.application
+*.resources
+*.manifest
+ContextMenu/obj/Release/ContextMenu.csproj.FileListAbsolute.txt
+*.application
+GrepperView/obj/x86/Debug/GrepperView.DirectoryBrowser.resources
+*.manifest
+GrepperView/obj/x86/Release/GrepperView.csproj.FileListAbsolute.txt
+*.resources
+GrepperView/obj/x86/Release/GrepperView.MainUI.resources
+GrepperView/obj/x86/Debug/GrepperView.csproj.FileListAbsolute.txt
