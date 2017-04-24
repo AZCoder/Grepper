@@ -60,7 +60,7 @@ namespace GrepperView
                 return;
             }
             
-            using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.Black, Color.LightGreen, 270F))
+            using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.White, Color.LightSteelBlue, 90F))
             {
                 e.Graphics.FillRectangle(brush, ClientRectangle);
             }
@@ -103,9 +103,9 @@ namespace GrepperView
         protected void TimeCounter_Tick(object sender, EventArgs e)
         {
             // reset to 0 if max reached, only need to show user that program is doing something and not frozen
-            if (progressBar.Step >= progressBar.Maximum)
-                progressBar.Step = 0;
-
+            if (progressBar.Value >= progressBar.Maximum)
+                progressBar.Value = 0;
+            
             progressBar.PerformStep();
         }
 
@@ -145,12 +145,12 @@ namespace GrepperView
         {
             lvwLineData.Items.Clear();
             string itemSelected = lvwFileMatches.SelectedItems[0].Text;
-            var fileMatch = from match in _fileController.FileDataList
-                            where match.FilePath == itemSelected
-                            select match;
+            var fileMatch = (from match in _fileController.FileDataList
+                             where match.FilePath == itemSelected
+                             select match.LineDataList).FirstOrDefault();
 
             if (fileMatch == null || fileMatch.Count() < 1) return;
-            foreach (KeyValuePair<long, string> item in (Dictionary<long, string>)fileMatch.First().LineDataList)
+            foreach (KeyValuePair<long, string> item in fileMatch)
             {
                 ListViewItem lvi = new ListViewItem(new string[] { item.Key.ToString(), item.Value });
                 lvwLineData.Items.Add(lvi);
@@ -172,13 +172,23 @@ namespace GrepperView
         private void CopyToClipboard()
         {
             string itemSelected = string.Empty;
+            string message = string.Empty;
+            UMessage.Message.MessageStatus status = UMessage.Message.MessageStatus.Success;
+
             if (IsLineDataSelectedValid())
                 itemSelected = lvwLineData.SelectedItems[0].SubItems[1].Text;
 
-            if (!string.IsNullOrEmpty(itemSelected))
+            if (string.IsNullOrEmpty(itemSelected))
+            {
+                message = "Nothing to copy.";
+                status = UMessage.Message.MessageStatus.Warning;
+            }
+            else
+            {
                 Clipboard.SetText(itemSelected);
-
-            lblMessages.Text = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+                message = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+            }
+            DisplayMessage(message, status);
         }
 
         private bool IsLineDataSelectedValid()
@@ -208,14 +218,29 @@ namespace GrepperView
         /// <param name="e"></param>
         private void Search_Click(object sender, EventArgs e)
         {
-            // clear out any messages
-            lblMessages.Text = string.Empty;
-            lvwFileMatches.Items.Clear();
-            lvwLineData.Items.Clear();
+            ResetUI();
+            SetUI_Inputs();
 
             // save the current user option settings
             SaveCurrentSettings();
 
+            // start the search
+            EvokeSearchThread();
+        }
+
+        private void ResetUI()
+        {
+            lblMessages.Text = string.Empty;
+            lvwFileMatches.Items.Clear();
+            lvwLineData.Items.Clear();
+
+            progressBar.Visible = true;
+            progressBar.Value = 0;
+            timeCounter.Enabled = true;
+        }
+
+        private void SetUI_Inputs()
+        {
             _fileController.SearchCriteria = ddlSearchCriteria.Text.Trim();
             _fileController.IsMatchCase = cbxMatchCase.Checked;
             _fileController.DoMatchPhrase = cbxMatchPhrase.Checked;
@@ -223,16 +248,14 @@ namespace GrepperView
             _fileController.SetBaseSearchPath(txtBaseSearchPath.Text);
             _fileController.IsLiteralSearch = rbLiteral.Checked;
             _fileController.LoadFileExtensionsFromString(ddlFileExtensions.Text);
+        }
 
+        private void EvokeSearchThread()
+        {
             // create background worker thread to perform search so that UI does not lock up
             workerThread = new BackgroundWorker();
             workerThread.DoWork += WorkerThread_DoWork;
             workerThread.RunWorkerCompleted += WorkerThread_RunWorkerCompleted;
-
-            // set & enable progressBar & timer
-            progressBar.Visible = true;
-            progressBar.Value = 0;
-            timeCounter.Enabled = true;
 
             // start the thread
             workerThread.RunWorkerAsync(_fileController);
@@ -251,8 +274,8 @@ namespace GrepperView
                 return;
 
             // display any errors
-            DisplayMessages();
-            DisplayResults(fc.FileDataList, fc.TotalMatches);
+            DisplayErrors();
+            DisplaySearchResultMessage(fc.FileDataList, fc.TotalMatches);
 
             foreach (FileData fd in fc.FileDataList)
             {
@@ -265,21 +288,24 @@ namespace GrepperView
             timeCounter.Enabled = false;
         }
 
-        private void DisplayResults(IList<FileData> results, int count)
+        private void DisplaySearchResultMessage(IList<FileData> results, int count)
         {
-            lblMessages.Visible = true;
+            string message = string.Empty;
+            UMessage.Message.MessageStatus status = UMessage.Message.MessageStatus.Success;
             if (results == null || results.Count < 1)
             {
-                lblMessages.Text = "No results found.";
-                return;
+                message = "No results found.";
+                status = UMessage.Message.MessageStatus.Warning;
             }
             
             string matches = count == 1 ? "" : "es";
             string files = results.Count == 1 ? "" : "s";
-            lblMessages.Text = string.Format("{0} match{1} in {2} file{3}", count, matches, results.Count, files);
+            message = string.Format("{0} match{1} in {2} file{3}", count, matches, results.Count, files);
+
+            DisplayMessage(message, status);
         }
 
-        private void DisplayMessages()
+        private void DisplayErrors()
         {
             if (UMessage.Message.MessageList == null)
                 return;
@@ -295,6 +321,19 @@ namespace GrepperView
             }
         }
 
+        private void DisplayMessage(string message, UMessage.Message.MessageStatus status)
+        {
+            if (status == UMessage.Message.MessageStatus.Error)
+                lblMessages.ForeColor = Color.Red;
+            if (status == UMessage.Message.MessageStatus.Warning)
+                lblMessages.ForeColor = Color.Orange;
+            if (status == UMessage.Message.MessageStatus.Success)
+                lblMessages.ForeColor = Color.Green;
+
+            lblMessages.Text = message;
+            lblMessages.Visible = true;
+        }
+
         /// <summary>
         /// Delegate method to perform FileController actions.
         /// </summary>
@@ -308,74 +347,62 @@ namespace GrepperView
             e.Result = fc;
         }
 
-        /// <summary>
-        /// Saves current state of settings, including file extensions to search, but not the base path
-        /// since that depends on where the user right-clicks in Explorer.
-        /// </summary>
-        private void SaveCurrentSettings()
+        private void SaveExtensions()
         {
-            #region Manage Extension List
-
-            if (ddlFileExtensions.Text.Length > 0 && !ddlFileExtensions.Items.Contains(ddlFileExtensions.Text))
-                ddlFileExtensions.Items.Add(ddlFileExtensions.Text);
-
+            if (ddlFileExtensions.Text.Length < 1 || ddlFileExtensions.Items.Contains(ddlFileExtensions.Text))
+                return;
+            
             List<string> extensionList = new List<string>();
+            ddlFileExtensions.Items.Add(ddlFileExtensions.Text);
             foreach (string item in ddlFileExtensions.Items)
             {
                 extensionList.Add(item);
             }
+
             RegistrySettings.SaveExtensionItems(extensionList);
+        }
 
-            #endregion
-            #region Manage Search List
+        private void ManageSearchList()
+        {
+            if (ddlSearchCriteria.Text.Length < 1)
+                return;
 
-            if (ddlSearchCriteria.Text.Length > 0)
-            {
-                // if item already exists, it must be moved to first place
-                if (ddlSearchCriteria.Items.Contains(ddlSearchCriteria.Text))
-                {
-                    List<string> itemList = new List<string>();
-                    foreach (string text in ddlSearchCriteria.Items)
-                    {
-                        itemList.Add(text);
-                    }
-                    ddlSearchCriteria.Items.Clear();
-                    foreach (string text in itemList)
-                    {
-                        if (text != ddlSearchCriteria.Text) ddlSearchCriteria.Items.Add(text);
-                    }
-                }
+            string searchTerm = ddlSearchCriteria.Text;
 
-                // new item is always first, and trim anything past 5 "remembered" items
-                ddlSearchCriteria.Items.Insert(0, ddlSearchCriteria.Text);
-                int total = ddlSearchCriteria.Items.Count;
-                if (total > 5)
-                {
-                    for (int i = 5; i < total; i++)
-                    {
-                        ddlSearchCriteria.Items.RemoveAt(i);
-                    }
-                }
-            }
-            
-            List<string> searchList = new List<string>();
+            // rebuild ddlSearchCriteria.Items without the search term (in case it already exists), then insert search term into first place
+            List<string> itemList = new List<string>();
             foreach (string item in ddlSearchCriteria.Items)
             {
-                searchList.Add(item);
+                if (item != searchTerm) itemList.Add(item);
+                if (itemList.Count >= 4)
+                    break;
             }
+            
+            ddlSearchCriteria.Items.Clear();
+            itemList.Insert(0, searchTerm);
+            ddlSearchCriteria.Items.AddRange(itemList.ToArray());            
+            RegistrySettings.SaveSearchItems(itemList);
+        }
 
-            #endregion
-            #region Save Items to Registry
-
-            RegistrySettings.SaveSearchItems(searchList);
+        private void SaveControlStates()
+        {
             RegistrySettings.SaveCurrentExtension(ddlFileExtensions.Text);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.literal, rbLiteral.Checked);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.matchCase, cbxMatchCase.Checked);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.matchPhrase, cbxMatchPhrase.Checked);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.recursive, cbxRecursive.Checked);
             RegistrySettings.SaveSettingString(RegistrySettings.GrepperKeyName.search, ddlSearchCriteria.Text);
+        }
 
-            #endregion
+        /// <summary>
+        /// Saves current state of settings, including file extensions to search, but not the base path
+        /// since that depends on where the user right-clicks in Explorer.
+        /// </summary>
+        private void SaveCurrentSettings()
+        {
+            SaveExtensions();
+            ManageSearchList();
+            SaveControlStates();
         }
 
         /// <summary>
@@ -386,26 +413,18 @@ namespace GrepperView
             try
             {
                 ddlFileExtensions.Items.Clear();
-                foreach (string item in RegistrySettings.LoadExtensions())
-                {
-                    ddlFileExtensions.Items.Add(item);
-                }
+                ddlFileExtensions.Items.AddRange(RegistrySettings.LoadExtensions().ToArray());
                 ddlFileExtensions.Text = RegistrySettings.GetLastExtension();
                 ddlSearchCriteria.Items.Clear();
-                foreach (string item in RegistrySettings.LoadSearchItems())
-                {
-                    ddlSearchCriteria.Items.Add(item);
-                }
+                ddlSearchCriteria.Items.AddRange(RegistrySettings.LoadSearchItems().ToArray());
                 ddlSearchCriteria.Text = RegistrySettings.LoadSettingString(RegistrySettings.GrepperKeyName.search);
+
                 cbxMatchCase.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.matchCase);
                 cbxMatchPhrase.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.matchPhrase);
                 cbxRecursive.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.recursive);
                 rbLiteral.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.literal);
                 rbRegular.Checked = !rbLiteral.Checked;
-                // set app version on titlebar
-                this.Text = string.Format("GREPPER v{0}.{1}.{2}", Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Major,
-                                                                  Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Minor,
-                                                                  Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Build);
+                SetTitleBar();
             }
             catch (InvalidCastException ice)
             {
@@ -415,6 +434,14 @@ namespace GrepperView
             {
                 UMessage.Message.Add(uae.Message);
             }
+        }
+
+        private void SetTitleBar()
+        {
+            // set app version on titlebar
+            Text = string.Format("GREPPER v{0}.{1}.{2}", Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Major,
+                                                         Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Minor,
+                                                         Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Build);
         }
 
         /// <summary>

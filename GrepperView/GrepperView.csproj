@@ -99,12 +99,6 @@
     <Compile Include="ExtensionsUI.Designer.cs">
       <DependentUpon>ExtensionsUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="GrepInstall.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GrepInstall.Designer.cs">
-      <DependentUpon>GrepInstall.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainUI.cs">
       <SubType>Form</SubType>
     </Compile>

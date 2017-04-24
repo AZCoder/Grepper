@@ -19,5 +19,12 @@ namespace GrepperLib.Utility
         {
             MessageList = new List<string>();
         }
+
+        public enum MessageStatus
+        {
+            Success,
+            Warning,
+            Error
+        }
     }
 }

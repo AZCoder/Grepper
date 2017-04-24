@@ -13,3 +13,6 @@
 *.cache
 /.vs/config
 GrepperView/GrepperView.csproj.user
+*.pdb
+GrepperLib/obj/Release/GrepperLib.dll
+*.dll

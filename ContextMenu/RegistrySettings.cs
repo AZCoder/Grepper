@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security;
 
 namespace Grepper.ContextMenu
 {
@@ -9,8 +10,8 @@ namespace Grepper.ContextMenu
         private static string _grepperPath = "Folder\\Shell\\Grepper\\";
         private static string _commandPath = _grepperPath + "Command";
         private static string _settingsPath = _grepperPath + "Settings";
-        private static string _extensionItemPath = _grepperPath + "Settings\\ExtensionItems";
-        private static string _searchItemPath = _grepperPath + "Settings\\SearchItems";
+        private static string _extensionItemPath = _settingsPath + "\\ExtensionItems";
+        private static string _searchItemPath = _settingsPath + "\\SearchItems";
 
         /// <summary>
         /// Adds the right-click context menu to explorer with the Grepper option.
@@ -19,9 +20,9 @@ namespace Grepper.ContextMenu
         public static void AddContextMenu(string path)
         {
             // Key Exists?
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_grepperPath, true);
+            RegistryKey key = GetKey(_grepperPath);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_grepperPath);
-            key = Registry.ClassesRoot.OpenSubKey(_commandPath, true);
+            key = GetKey(_commandPath);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_commandPath);
             object keyData = key.GetValue("");
             if ((keyData == null) || (keyData.ToString().Length < 1))
@@ -37,24 +38,27 @@ namespace Grepper.ContextMenu
         /// <returns>String of extensions.</returns>
         public static string GetLastExtension()
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
-            if (key == null) key = AddSettingsKeys();
-            string lastExtension = LoadSettingString(GrepperKeyName.extensionItem);
-            if (!string.IsNullOrEmpty(lastExtension))
-            {
-                key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
-                if (key != null)
-                {
-                    var item = from v in key.GetValueNames()
-                               where v == lastExtension.Trim()
-                               select key.GetValue(v).ToString();
+            RegistryKey key = GetKey(_settingsPath);
+            if (key == null)
+                key = CreateSettingsKeys();
 
-                    if (item != null && item.Count() > 0)
-                        lastExtension = item.First();
-                }
-            }
+            string extensionTag = LoadSettingString(GrepperKeyName.extensionItem);
+            if (string.IsNullOrEmpty(extensionTag))
+                return string.Empty;
 
-            return lastExtension;
+            key = GetKey(_extensionItemPath);
+            if (key == null)
+                return string.Empty;
+            
+            var item = from v in key.GetValueNames()
+                        where v == extensionTag.Trim()
+                        select key.GetValue(v).ToString();
+
+            string lastUsedExtension = string.Empty;
+            if (item != null && item.Count() > 0)
+                lastUsedExtension = item.First();
+
+            return lastUsedExtension;
         }
 
         /// <summary>
@@ -65,7 +69,7 @@ namespace Grepper.ContextMenu
         public static IList<string> LoadExtensions()
         {
             List<string> extensionValues = new List<string>();
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
+            RegistryKey key = GetKey(_extensionItemPath);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_extensionItemPath);
             foreach (string keyName in key.GetValueNames())
             {
@@ -81,7 +85,7 @@ namespace Grepper.ContextMenu
         public static IList<string> LoadSearchItems()
         {
             List<string> searchItems = new List<string>();
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_searchItemPath, true);
+            RegistryKey key = GetKey(_searchItemPath);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_searchItemPath);
             foreach (string keyName in key.GetValueNames())
             {
@@ -101,11 +105,9 @@ namespace Grepper.ContextMenu
         /// <returns>String value of the registry key.</returns>
         public static string LoadSettingString(GrepperKeyName keyName)
         {
-            // Key Exists?
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
-            if (key == null) key = AddSettingsKeys();
+            RegistryKey key = CreateSettingsKeys();
 
-            if (key.GetValue(keyName.ToString()) == null) AddSettingsSubKey(key, keyName, RegistryValueKind.String, string.Empty);
+            if (key.GetValue(keyName.ToString()) == null) AddSettingsSubKey(keyName, RegistryValueKind.String, string.Empty);
             return (key.GetValue(keyName.ToString()) != null) ? key.GetValue(keyName.ToString()).ToString() : string.Empty;
         }
 
@@ -116,12 +118,10 @@ namespace Grepper.ContextMenu
         /// <returns>Boolean value of the registry key.</returns>
         public static bool LoadSettingBool(GrepperKeyName keyName)
         {
-            // Key Exists?
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
-            if (key == null) AddSettingsKeys();
+            RegistryKey key = CreateSettingsKeys();
 
             byte[] isChecked = (byte[])key.GetValue(keyName.ToString());
-            if (isChecked == null) AddSettingsSubKey(key, keyName, RegistryValueKind.Binary, "0");
+            if (isChecked == null) AddSettingsSubKey(keyName, RegistryValueKind.Binary, "0");
             isChecked = (byte[])key.GetValue(keyName.ToString());
             return (isChecked != null && isChecked[0] == 1) ? true : false;
         }
@@ -133,12 +133,7 @@ namespace Grepper.ContextMenu
         /// <param name="keyValue">Value to save.</param>
         public static void SaveSettingString(GrepperKeyName keyName, string keyValue)
         {
-            // Key Exists?
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
-            if (key != null)
-            {
-                AddSettingsSubKey(key, keyName, RegistryValueKind.String, keyValue);
-            }
+            AddSettingsSubKey(keyName, RegistryValueKind.String, keyValue);
         }
 
         /// <summary>
@@ -148,28 +143,26 @@ namespace Grepper.ContextMenu
         /// <param name="keyValue">Value to save.</param>
         public static void SaveSettingBool(GrepperKeyName keyName, bool keyValue)
         {
-            // Key Exists?
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
-            if (key != null)
-            {
-                string val = (keyValue) ? "1" : "0";
-                AddSettingsSubKey(key, keyName, RegistryValueKind.Binary, val);
-            }
+            string val = (keyValue) ? "1" : "0";
+            AddSettingsSubKey(keyName, RegistryValueKind.Binary, val);
         }
 
         /// <summary>
         /// Saves a registry STRING subkey value to the registry.
         /// </summary>
         /// <param name="itemName">List of extension items to save.</param>
-        public static void SaveExtensionItems(IList<string> itemList)
+        public static void SaveExtensionItems(IList<string> itemList, string oldItem = "")
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
-            if (key != null && itemList.Count > 0)
+            RegistryKey key = GetKey(_extensionItemPath);
+            if (key == null || itemList == null)
+                return;
+
+            if (!string.IsNullOrEmpty(oldItem))
+                itemList.Remove(oldItem);
+
+            for (int i = 0; i < itemList.Count; i++)
             {
-                for (int i = 0; i < itemList.Count; i++)
-                {
-                    key.SetValue(string.Format("extension{0}", i + 1), itemList[i].ToString());
-                }
+                key.SetValue(string.Format("extension{0}", i + 1), itemList[i].ToString());
             }
         }
 
@@ -180,15 +173,15 @@ namespace Grepper.ContextMenu
         /// <param name="itemName">List of search items to save.</param>
         public static void SaveSearchItems(IList<string> itemList)
         {
+            RegistryKey key = GetKey(_searchItemPath);
+            if (key == null || itemList == null)
+                return;
+            
             DeleteSearchItems();
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_searchItemPath, true);
-            int items = itemList.Count > 5 ? 5 : itemList.Count;
-            if (key != null && itemList.Count > 0)
+            int itemCount = itemList.Count > 5 ? 5 : itemList.Count;
+            for (int i = 0; i < itemCount; i++)
             {
-                for (int i = 0; i < items; i++)
-                {
-                    key.SetValue(string.Format("search{0}", i + 1), itemList[i].ToString());
-                }
+                key.SetValue(string.Format("search{0}", i + 1), itemList[i].ToString());
             }
         }
 
@@ -198,7 +191,9 @@ namespace Grepper.ContextMenu
         /// <returns></returns>
         public static void DeleteSearchItems()
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_searchItemPath, true);
+            RegistryKey key = GetKey(_searchItemPath);
+            if (key == null)
+                return;
 
             List<string> searchList = LoadSearchItems().ToList();
             for (int i = 0; i < searchList.Count; i++)
@@ -213,8 +208,9 @@ namespace Grepper.ContextMenu
         /// <param name="item"></param>
         public static bool DeleteExtensionItem(string item)
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
-            if (key == null && item.Length <= 0) return false;
+            RegistryKey key = GetKey(_extensionItemPath);
+            if (key == null && item.Length <= 0)
+                return false;
 
             // remove all extensions, then re-add them except for the deleted item
             // this will maintain numerical order
@@ -224,7 +220,7 @@ namespace Grepper.ContextMenu
             // overwrite existing key/values
             SaveExtensionItems(extensionList);
 
-            // remove exceess key (should be one)
+            // remove extension key (should be one)
             int extension = extensionList.Count();
             key.DeleteValue(string.Format("extension{0}", extension + 1));
 
@@ -239,8 +235,9 @@ namespace Grepper.ContextMenu
         /// <param name="extension">The string of extension names (not the key, just the values)</param>
         public static void SaveCurrentExtension(string extension)
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_extensionItemPath, true);
-            if (key == null) key = Registry.ClassesRoot.CreateSubKey(_extensionItemPath);
+            RegistryKey key = GetKey(_extensionItemPath);
+            if (key == null)
+                return;
 
             var item = from v in key.GetValueNames()
                        where key.GetValue(v.Trim()).ToString() == extension.Trim()
@@ -250,13 +247,28 @@ namespace Grepper.ContextMenu
                 SaveSettingString(GrepperKeyName.extensionItem, item.First());
         }
 
+        private static RegistryKey GetKey(string path)
+        {
+            RegistryKey key = null;
+            try
+            {
+                key = Registry.ClassesRoot.OpenSubKey(path, true);
+            }
+            catch (SecurityException)
+            {
+                key = null;
+            }
+
+            return key;
+        }
+        
         /// <summary>
         /// Adds the user settings key to registry.
         /// </summary>
         /// <returns>RegistryKey</returns>
-        private static RegistryKey AddSettingsKeys()
+        private static RegistryKey CreateSettingsKeys()
         {
-            RegistryKey key = Registry.ClassesRoot.OpenSubKey(_settingsPath, true);
+            RegistryKey key = GetKey(_settingsPath);
             if (key == null) key = Registry.ClassesRoot.CreateSubKey(_settingsPath);
             return key;
         }
@@ -268,12 +280,14 @@ namespace Grepper.ContextMenu
         /// <param name="keyName">Enum of registry subkey.</param>
         /// <param name="rvk">Kind of registry value (binary, string, etc).</param>
         /// <param name="keyValue">Optional value, will assume empty or 0 values if not provided.</param>
-        private static void AddSettingsSubKey(RegistryKey key, GrepperKeyName keyName, RegistryValueKind rvk, string keyValue = "")
+        private static void AddSettingsSubKey(GrepperKeyName keyName, RegistryValueKind rvk, string keyValue = "")
         {
+            RegistryKey key = GetKey(_settingsPath);
             if (rvk == RegistryValueKind.String)
             {
                 key.SetValue(keyName.ToString(), keyValue, RegistryValueKind.String);
             }
+
             if (rvk == RegistryValueKind.Binary)
             {
                 byte[] bit = new byte[1];

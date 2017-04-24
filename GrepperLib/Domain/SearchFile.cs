@@ -105,13 +105,34 @@ namespace GrepperLib.Domain
 
         private bool FindByRegEx(Search search, string line)
         {
-            return Regex.IsMatch(line, search.SearchTerm, _regOptions);
+            bool isFound = false;
+
+            try
+            {
+                isFound = Regex.IsMatch(line, search.SearchTerm, _regOptions);
+            }
+            catch (Exception) 
+            {
+                Message.Add("Invalid search term.");
+            }
+
+            return isFound;
         }
 
         private bool FindByLiteral(Search search, string line)
         {
+            bool isFound = false;
             string phrase = string.Format(@"(\b)({0}+(\b|\n|\s))", search.SearchTerm);
-            return Regex.IsMatch(line, phrase, _regOptions);
+            try
+            {
+                isFound = Regex.IsMatch(line, phrase, _regOptions);
+            }
+            catch (Exception)
+            {
+                Message.Add("Invalid search term.");
+            }
+
+            return isFound;
         }
 
         private bool FindByExact(Search search, string line)
