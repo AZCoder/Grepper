@@ -89,7 +89,7 @@ namespace GrepperView
 
             FileExtension extension = new FileExtension();
             IList<string> baseList = new List<string>();
-            string selectedItem = lbExtensions.SelectedItem.ToString();
+            string selectedItem = lbExtensions.SelectedItem == null ? null : lbExtensions.SelectedItem.ToString();
             // if existing saved item is selected on left, then modify that row, otherwise add new row of checked items
             if (!string.IsNullOrEmpty(selectedItem))
                 baseList = extension.ConvertSpacedStringToList(selectedItem);
