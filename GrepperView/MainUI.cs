@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Grepper.ContextMenu;
 using GrepperLib.Controller;
 using GrepperLib.Model;
+using GrepperLib.Domain;
 using UMessage = GrepperLib.Utility;
 
 namespace GrepperView
@@ -386,6 +387,21 @@ namespace GrepperView
 
         private void SaveControlStates()
         {
+            // TODO: need to convert the 2 List<string> properties before saving
+            //SettingsManager sm = new SettingsManager();
+            //Settings settings = new Settings();
+            //settings.IsLiteral = rbLiteral.Checked;
+            //settings.IsRecursive = cbxRecursive.Checked;
+            //settings.LastExtension = ddlFileExtensions.Text;
+            //settings.MatchCase = cbxMatchCase.Checked;
+            //settings.MatchPhrase = cbxMatchPhrase.Checked;
+            //settings.SavedExtensions = null;
+            //settings.SavedSearchTerms = null;
+            //settings.SearchTerm = ddlSearchCriteria.Text;
+
+            //if (!sm.SaveSettings(settings))
+            //    DisplayMessage("Unable to save settings.", UMessage.Message.MessageStatus.Error);
+
             RegistrySettings.SaveCurrentExtension(ddlFileExtensions.Text);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.literal, rbLiteral.Checked);
             RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.matchCase, cbxMatchCase.Checked);

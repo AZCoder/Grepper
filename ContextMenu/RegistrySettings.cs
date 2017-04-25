@@ -21,9 +21,13 @@ namespace Grepper.ContextMenu
         {
             // Key Exists?
             RegistryKey key = GetKey(_grepperPath);
-            if (key == null) key = Registry.ClassesRoot.CreateSubKey(_grepperPath);
+            if (key == null)
+                key = Registry.ClassesRoot.CreateSubKey(_grepperPath);
+
             key = GetKey(_commandPath);
-            if (key == null) key = Registry.ClassesRoot.CreateSubKey(_commandPath);
+            if (key == null)
+                key = Registry.ClassesRoot.CreateSubKey(_commandPath);
+
             object keyData = key.GetValue("");
             if ((keyData == null) || (keyData.ToString().Length < 1))
             {
@@ -70,7 +74,9 @@ namespace Grepper.ContextMenu
         {
             List<string> extensionValues = new List<string>();
             RegistryKey key = GetKey(_extensionItemPath);
-            if (key == null) key = Registry.ClassesRoot.CreateSubKey(_extensionItemPath);
+            if (key == null)
+                key = Registry.ClassesRoot.CreateSubKey(_extensionItemPath);
+
             foreach (string keyName in key.GetValueNames())
             {
                 if (key.GetValue(keyName) != null)
