@@ -39,6 +39,8 @@ namespace GrepperView
             txtBaseSearchPath.Text = path;
             _fileController = new FileController();
 
+            this.ActiveControl = ddlSearchCriteria;
+
             // set tool tips
             SetToolTips();
 

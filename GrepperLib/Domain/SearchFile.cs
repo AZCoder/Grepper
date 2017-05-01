@@ -121,6 +121,11 @@ namespace GrepperLib.Domain
 
         private bool FindByLiteral(Search search, string line)
         {
+            return line.Contains(search.SearchTerm);
+        }
+
+        private bool FindByExact(Search search, string line)
+        {
             bool isFound = false;
             string phrase = string.Format(@"(\b)({0}+(\b|\n|\s))", search.SearchTerm);
             try
@@ -133,11 +138,6 @@ namespace GrepperLib.Domain
             }
 
             return isFound;
-        }
-
-        private bool FindByExact(Search search, string line)
-        {
-            return line.Contains(search.SearchTerm);
         }
     }
 }
