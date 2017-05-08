@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Grepper.ContextMenu;
 using GrepperLib.Domain;
 using GrepperLib.Utility;
 
@@ -14,8 +8,10 @@ namespace GrepperView
 {
     public partial class ExtensionsUI : Form
     {
+        protected readonly ISettings _settings;
         public ExtensionsUI()
         {
+            _settings = new SettingsManager();
             InitializeComponent();
             LoadExtensions();
         }
@@ -29,10 +25,9 @@ namespace GrepperView
         {
             if (lbExtensions.SelectedItem == null)
                 return;
-            
-            if (RegistrySettings.DeleteExtensionItem(lbExtensions.SelectedItem.ToString()))
+
+            if (_settings.DeleteExtension(lbExtensions.SelectedItem.ToString()))
             {
-                // update UI
                 lbExtensions.Items.Clear();
                 LoadExtensions();
             }
@@ -67,13 +62,10 @@ namespace GrepperView
             return checkedList;
         }
 
-        /// <summary>
-        /// Loads extensions saved in the registry.
-        /// </summary>
         private void LoadExtensions()
         {
             lbExtensions.Items.Clear();
-            foreach (string item in RegistrySettings.LoadExtensions())
+            foreach (string item in _settings.GetExtensions())
             {
                 lbExtensions.Items.Add(item);
             }
@@ -89,10 +81,14 @@ namespace GrepperView
 
             FileExtension extension = new FileExtension();
             IList<string> baseList = new List<string>();
-            string selectedItem = lbExtensions.SelectedItem == null ? null : lbExtensions.SelectedItem.ToString();
+            var allExtensions = _settings.GetExtensions();
+            string selectedItem = lbExtensions.SelectedItem?.ToString();
             // if existing saved item is selected on left, then modify that row, otherwise add new row of checked items
             if (!string.IsNullOrEmpty(selectedItem))
+            {
                 baseList = extension.ConvertSpacedStringToList(selectedItem);
+                allExtensions.Remove(selectedItem);
+            }
 
             List<string> checkedList = new List<string>();
             foreach (var item in checkedItems)
@@ -103,9 +99,8 @@ namespace GrepperView
             string rowItem = extension.GetSpacedStringFromList(checkedList);
             baseList = extension.MergeListWithSpacedString(baseList, rowItem);
             string spacedItem = extension.GetSpacedStringFromList(baseList);
-            var allExtensions = RegistrySettings.LoadExtensions();
             allExtensions.Add(spacedItem);
-            RegistrySettings.SaveExtensionItems(allExtensions, selectedItem);
+            _settings.SaveExtensions(allExtensions);
             LoadExtensions();
         }
     }

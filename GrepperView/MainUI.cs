@@ -7,7 +7,6 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Grepper.ContextMenu;
 using GrepperLib.Controller;
 using GrepperLib.Model;
 using GrepperLib.Domain;
@@ -20,6 +19,8 @@ namespace GrepperView
         #region Private Members________
 
         private readonly FileController _fileController;
+        private readonly ISettings _settings;
+        private Settings _appSettings;
         private static BackgroundWorker workerThread;
 
         #endregion
@@ -38,6 +39,7 @@ namespace GrepperView
             progressBar.Visible = false;
             txtBaseSearchPath.Text = path;
             _fileController = new FileController();
+            _settings = new SettingsManager();
 
             this.ActiveControl = ddlSearchCriteria;
 
@@ -352,17 +354,16 @@ namespace GrepperView
 
         private void SaveExtensions()
         {
-            if (ddlFileExtensions.Text.Length < 1 || ddlFileExtensions.Items.Contains(ddlFileExtensions.Text))
-                return;
-            
             List<string> extensionList = new List<string>();
-            ddlFileExtensions.Items.Add(ddlFileExtensions.Text);
+            if (!ddlFileExtensions.Items.Contains(ddlFileExtensions.Text))
+                ddlFileExtensions.Items.Add(ddlFileExtensions.Text);
+
             foreach (string item in ddlFileExtensions.Items)
             {
                 extensionList.Add(item);
             }
-
-            RegistrySettings.SaveExtensionItems(extensionList);
+            
+            _settings.SaveExtensions(extensionList);
         }
 
         private void ManageSearchList()
@@ -383,33 +384,21 @@ namespace GrepperView
             
             ddlSearchCriteria.Items.Clear();
             itemList.Insert(0, searchTerm);
-            ddlSearchCriteria.Items.AddRange(itemList.ToArray());            
-            RegistrySettings.SaveSearchItems(itemList);
+            ddlSearchCriteria.Items.AddRange(itemList.ToArray());
+            _settings.SaveSearches(itemList);
         }
 
         private void SaveControlStates()
         {
-            // TODO: need to convert the 2 List<string> properties before saving
-            //SettingsManager sm = new SettingsManager();
-            //Settings settings = new Settings();
-            //settings.IsLiteral = rbLiteral.Checked;
-            //settings.IsRecursive = cbxRecursive.Checked;
-            //settings.LastExtension = ddlFileExtensions.Text;
-            //settings.MatchCase = cbxMatchCase.Checked;
-            //settings.MatchPhrase = cbxMatchPhrase.Checked;
-            //settings.SavedExtensions = null;
-            //settings.SavedSearchTerms = null;
-            //settings.SearchTerm = ddlSearchCriteria.Text;
+            _appSettings.IsLiteral = rbLiteral.Checked;
+            _appSettings.IsRecursive = cbxRecursive.Checked;
+            _appSettings.LastExtension = ddlFileExtensions.Text;
+            _appSettings.MatchCase = cbxMatchCase.Checked;
+            _appSettings.MatchPhrase = cbxMatchPhrase.Checked;
+            _appSettings.SearchTerm = ddlSearchCriteria.Text;
 
-            //if (!sm.SaveSettings(settings))
-            //    DisplayMessage("Unable to save settings.", UMessage.Message.MessageStatus.Error);
-
-            RegistrySettings.SaveCurrentExtension(ddlFileExtensions.Text);
-            RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.literal, rbLiteral.Checked);
-            RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.matchCase, cbxMatchCase.Checked);
-            RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.matchPhrase, cbxMatchPhrase.Checked);
-            RegistrySettings.SaveSettingBool(RegistrySettings.GrepperKeyName.recursive, cbxRecursive.Checked);
-            RegistrySettings.SaveSettingString(RegistrySettings.GrepperKeyName.search, ddlSearchCriteria.Text);
+            if (!_settings.SaveSettings(_appSettings))
+                DisplayMessage("Unable to save settings.", UMessage.Message.MessageStatus.Error);
         }
 
         /// <summary>
@@ -428,30 +417,24 @@ namespace GrepperView
         /// </summary>
         private void LoadSettings()
         {
-            try
-            {
-                ddlFileExtensions.Items.Clear();
-                ddlFileExtensions.Items.AddRange(RegistrySettings.LoadExtensions().ToArray());
-                ddlFileExtensions.Text = RegistrySettings.GetLastExtension();
-                ddlSearchCriteria.Items.Clear();
-                ddlSearchCriteria.Items.AddRange(RegistrySettings.LoadSearchItems().ToArray());
-                ddlSearchCriteria.Text = RegistrySettings.LoadSettingString(RegistrySettings.GrepperKeyName.search);
+            _appSettings = _settings.LoadSettings();
 
-                cbxMatchCase.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.matchCase);
-                cbxMatchPhrase.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.matchPhrase);
-                cbxRecursive.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.recursive);
-                rbLiteral.Checked = RegistrySettings.LoadSettingBool(RegistrySettings.GrepperKeyName.literal);
-                rbRegular.Checked = !rbLiteral.Checked;
-                SetTitleBar();
-            }
-            catch (InvalidCastException ice)
-            {
-                UMessage.Message.Add(ice.Message);
-            }
-            catch (UnauthorizedAccessException uae)
-            {
-                UMessage.Message.Add(uae.Message);
-            }
+            ddlFileExtensions.Items.Clear();
+            ddlFileExtensions.Text = _appSettings.LastExtension;
+            if (_appSettings.SavedExtensions != null)
+                ddlFileExtensions.Items.AddRange(_appSettings.SavedExtensions.ToArray());
+
+            ddlSearchCriteria.Items.Clear();
+            ddlSearchCriteria.Text = _appSettings.SearchTerm;
+            if (_appSettings.SavedSearchTerms != null)
+                ddlSearchCriteria.Items.AddRange(_appSettings.SavedSearchTerms.ToArray());
+
+            cbxMatchCase.Checked = _appSettings.MatchCase;
+            cbxMatchPhrase.Checked = _appSettings.MatchPhrase;
+            cbxRecursive.Checked = _appSettings.IsRecursive;
+            rbLiteral.Checked = _appSettings.IsLiteral;
+            rbRegular.Checked = !rbLiteral.Checked;
+            SetTitleBar();
         }
 
         private void SetTitleBar()

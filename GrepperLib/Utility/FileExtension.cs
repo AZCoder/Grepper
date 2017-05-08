@@ -46,7 +46,8 @@ namespace GrepperLib.Utility
 
         public void Remove(string extension)
         {
-            _fileExtensions.Remove(extension);
+            if (_fileExtensions != null)
+                _fileExtensions.Remove(extension);
         }
 
         public string GetSpacedStringFromList(IList<string> extList = null)
@@ -78,8 +79,11 @@ namespace GrepperLib.Utility
 
         public IList<string> LoadListFromSpacedString(string spacedString)
         {
-            _fileExtensions = ConvertSpacedStringToList(spacedString).ToList();
+            var results = ConvertSpacedStringToList(spacedString);
+            if (results == null)
+                return null;
 
+            _fileExtensions = results.ToList();
             return _fileExtensions;
         }
 

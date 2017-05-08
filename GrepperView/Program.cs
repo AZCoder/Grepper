@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using Grepper.ContextMenu;
 using GrepperLib.Domain;
 
 namespace GrepperView
@@ -17,7 +13,7 @@ namespace GrepperView
 		static void Main(string[] args)
         {
             // add context menu if it does not exist
-            RegistrySettings.AddContextMenu(Application.ExecutablePath);
+            Grepper.ContextMenu.ContextMenu.AddContextMenu(Application.ExecutablePath);
             IFileDirectory fileDirectory = new FileDirectory();
             string path = fileDirectory.GetPathAtLoadup(args);
             

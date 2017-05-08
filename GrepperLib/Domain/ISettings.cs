@@ -10,7 +10,9 @@ namespace GrepperLib.Domain
     {
         bool SaveSettings(Settings settings);
         Settings LoadSettings();
-        IList<string> LoadExtensions(); // TODO - technically part of Settings, but ExtensionsUI only needs this list
+        IList<string> GetExtensions();
+        bool SaveExtensions(IList<string> extensions);
+        bool SaveSearches(IList<string> searches);
         bool DeleteExtension(string extension);
     }
 }
