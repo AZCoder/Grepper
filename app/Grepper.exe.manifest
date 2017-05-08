@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ContextMenu.dll" size="8704">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ContextMenu.dll" size="5120">
       <assemblyIdentity name="ContextMenu" version="3.0.1.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>heRa9zoApss9RoDK3XT0VBXfY58=</dsig:DigestValue>
+        <dsig:DigestValue>s/DdRdlsihW1b19OTkWi9hQeEKg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -62,19 +62,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>9uZc8uTgNV6Wt5Y5FKdtjwHhQEA=</dsig:DigestValue>
+        <dsig:DigestValue>VpumhlrsG0g2IeJ8ZBn2eNLgJSQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GrepperLib.dll" size="16384">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GrepperLib.dll" size="17408">
       <assemblyIdentity name="GrepperLib" version="3.1.2.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>RSxp3vLNklfWlcxGuW13B1I6c04=</dsig:DigestValue>
+        <dsig:DigestValue>eMcS1mSqLuHKt3kXD9zD4oJ3QC4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
