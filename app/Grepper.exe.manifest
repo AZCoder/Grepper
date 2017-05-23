@@ -4,7 +4,7 @@
   <description asmv2:iconFile="Folder.ico" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <application />
   <entryPoint>
-    <assemblyIdentity name="Grepper" version="3.1.2.0" language="neutral" processorArchitecture="x86" />
+    <assemblyIdentity name="Grepper" version="3.2.1.0" language="neutral" processorArchitecture="x86" />
     <commandLine file="Grepper.exe" parameters="" />
   </entryPoint>
   <trustInfo>
@@ -44,37 +44,37 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ContextMenu.dll" size="5120">
-      <assemblyIdentity name="ContextMenu" version="3.0.1.0" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="ContextMenu" version="3.1.1.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>s/DdRdlsihW1b19OTkWi9hQeEKg=</dsig:DigestValue>
+        <dsig:DigestValue>XClefMTmNjLrsxNSrw/ewybVxxc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Grepper.exe" size="733184">
-      <assemblyIdentity name="Grepper" version="3.1.2.0" language="neutral" processorArchitecture="x86" />
+      <assemblyIdentity name="Grepper" version="3.2.1.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>VpumhlrsG0g2IeJ8ZBn2eNLgJSQ=</dsig:DigestValue>
+        <dsig:DigestValue>FBiRHmfca52nrEaQVs7PJ+rMOAk=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GrepperLib.dll" size="17408">
-      <assemblyIdentity name="GrepperLib" version="3.1.2.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GrepperLib.dll" size="17920">
+      <assemblyIdentity name="GrepperLib" version="3.2.1.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>eMcS1mSqLuHKt3kXD9zD4oJ3QC4=</dsig:DigestValue>
+        <dsig:DigestValue>lXP0rsQziCl+xw82uKXj5fNFqnY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
