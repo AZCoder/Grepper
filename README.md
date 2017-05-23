@@ -15,6 +15,4 @@ trying to see how you resolved a coding problem before, and just want to copy an
 to work on the current piece.
 
 Grepper uses the Windows registry to allow its invocation within Windows Explorer, so that you can right-click on a directory and bring
-up the tool for that location. Currently all settings are stored in the registry as well, although in the future I may move them into
-json files stored with the app. Unfortunately the only way to invoke the app from Explorer is by adding it to the registry. This is
-purely for convenience as you can open the app the normal way and browse to the folder you want.
+up the tool for that location. All settings are saved as a json structured file.
