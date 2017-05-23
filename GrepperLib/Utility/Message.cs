@@ -9,7 +9,7 @@ namespace GrepperLib.Utility
         public static void Add(string message)
         {
             if ((MessageList == null) || (MessageList.Count < 1)) Clear();
-            if (!MessageList.Contains(message)) MessageList.Add(message);
+            if (MessageList != null && !MessageList.Contains(message)) MessageList.Add(message);
         }
 
         public static void Clear()

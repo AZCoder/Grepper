@@ -4,16 +4,16 @@ using GrepperLib.Domain;
 
 namespace GrepperView
 {
-	static class Program
+    internal static class Program
 	{
 		/// <summary>
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main(string[] args)
+		private static void Main(string[] args)
         {
             // add context menu if it does not exist
-            Grepper.ContextMenu.ContextMenu.AddContextMenu(Application.ExecutablePath);
+            ContextMenu.ContextMenu.AddContextMenu(Application.ExecutablePath);
             IFileDirectory fileDirectory = new FileDirectory();
             string path = fileDirectory.GetPathAtLoadup(args);
             

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using GrepperLib.Utility;
 
 namespace GrepperLib.Model
@@ -28,7 +24,7 @@ namespace GrepperLib.Model
         {
             _baseSearchPath = string.Empty;
             // match a drive letter pattern only
-            Regex reg = new Regex("^[a-zA-Z][:]{1}");
+            var reg = new Regex("^[a-zA-Z][:]{1}");
             if (reg.IsMatch(value))
                 _baseSearchPath = value;
         }

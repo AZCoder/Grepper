@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GrepperLib.Utility
 {
@@ -13,21 +11,9 @@ namespace GrepperLib.Utility
     {
         private List<string> _fileExtensions;
 
-        public IList<string> FileExtensionList
-        {
-            get
-            {
-                return _fileExtensions;
-            }
-        }
+        public IList<string> FileExtensionList => _fileExtensions;
 
-        public int Count
-        {
-            get
-            {
-                return _fileExtensions.Count;
-            }
-        }
+        public int Count => _fileExtensions.Count;
 
         public FileExtension()
         {
@@ -46,8 +32,7 @@ namespace GrepperLib.Utility
 
         public void Remove(string extension)
         {
-            if (_fileExtensions != null)
-                _fileExtensions.Remove(extension);
+            _fileExtensions?.Remove(extension);
         }
 
         public string GetSpacedStringFromList(IList<string> extList = null)
@@ -56,9 +41,7 @@ namespace GrepperLib.Utility
             if (extList == null)
                 extList = _fileExtensions;
 
-            foreach (var ext in extList)
-                spacedString += ext + " ";
-
+            spacedString = extList.Aggregate(spacedString, (current, ext) => current + (ext + " "));
             return spacedString.TrimEnd();
         }
         
@@ -92,16 +75,10 @@ namespace GrepperLib.Utility
             if (string.IsNullOrEmpty(spacedString))
                 return null;
 
-            List<string> result = new List<string>();
-            char[] delimeters = new char[] { ' ', ',' };
-            string[] extensions = spacedString.Split(delimeters);
+            var delimeters = new[] { ' ', ',' };
+            var extensions = spacedString.Split(delimeters);
 
-            foreach (string word in extensions)
-            {
-                result.Add(word.Trim());
-            }
-
-            return result;
+            return extensions.Select(word => word.Trim()).ToList();
         }
     }
 }

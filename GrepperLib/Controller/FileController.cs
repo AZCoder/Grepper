@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using GrepperLib.Model;
 using GrepperLib.Utility;
 using GrepperLib.Domain;
@@ -15,16 +14,9 @@ namespace GrepperLib.Controller
         protected const string NOSEARCHPATH = "No search path provided.";
 
         protected readonly ISearchFile _searchFile;
-        private Search _search;
-        private IList<FileData> _fileDataList;
+        private readonly Search _search;
 
-        public IList<FileData> FileDataList
-        {
-            get
-            {
-                return _fileDataList;
-            }
-        }
+        public IList<FileData> FileDataList { get; private set; }
 
         public bool RecursiveSearch
         {
@@ -107,7 +99,7 @@ namespace GrepperLib.Controller
         {
             _search = new Search();
             _searchFile = new SearchFile();
-            _fileDataList = new List<FileData>();
+            FileDataList = new List<FileData>();
         }
 
         public void SetBaseSearchPath(string path)
@@ -123,7 +115,6 @@ namespace GrepperLib.Controller
         /// <summary>
         /// Creates a list of FileData objects and
         /// </summary>
-        /// <param name="criteria">criteria to search</param>
         public void GenerateFileData()
         {
             // if no criteria or no file extensions or no base path, there is no way data can be generated
@@ -133,7 +124,7 @@ namespace GrepperLib.Controller
 
             try
             {
-                _fileDataList = _searchFile.Search(_search);
+                FileDataList = _searchFile.Search(_search);
             }
             catch (PathTooLongException ptle)
             {

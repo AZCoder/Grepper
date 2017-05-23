@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
 using GrepperLib.Model;
 
@@ -21,7 +19,7 @@ namespace GrepperLib.Domain
 
         public bool SaveSettings(Settings settings)
         {
-            bool isSaved = false;
+            bool isSaved;
             // get extensions and search terms before updating
             _settings = LoadSettings();
             AddSearchTerm(_settings, settings.SearchTerm);
@@ -49,7 +47,7 @@ namespace GrepperLib.Domain
             extension = extension.Trim();
             var extensions = GetExtensions();
             if (!extensions.Contains(extension))
-                return isDeleted;
+                return false;
 
             if (extensions.Remove(extension))
             {
@@ -109,9 +107,9 @@ namespace GrepperLib.Domain
         public bool SaveExtensions(IList<string> extensions)
         {
             // note that this will OVERRIDE all existing extensions
-            bool isSaved = false;
+            bool isSaved;
             if (extensions == null)
-                return isSaved;
+                return false;
 
             _settings = LoadSettings();
             extensions = RemoveDuplicates(extensions);
@@ -133,9 +131,9 @@ namespace GrepperLib.Domain
         public bool SaveSearches(IList<string> searches)
         {
             // note that this will OVERRIDE all existing search terms
-            bool isSaved = false;
+            bool isSaved;
             if (searches == null)
-                return isSaved;
+                return false;
 
             _settings = LoadSettings();
             searches = RemoveDuplicates(searches);
@@ -156,7 +154,7 @@ namespace GrepperLib.Domain
 
         private IList<string> RemoveDuplicates(IList<string> listToClean)
         {
-            List<string> cleanList = new List<string>();
+            var cleanList = new List<string>();
             foreach (var item in listToClean)
             {
                 if (!string.IsNullOrEmpty(item) && !cleanList.Contains(item))

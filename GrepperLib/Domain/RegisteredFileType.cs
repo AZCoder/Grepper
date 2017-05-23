@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Security;
 using Microsoft.Win32;
@@ -18,22 +17,20 @@ namespace GrepperLib.Domain
         private IList<FileType> LoadFileTypes()
         {
             var types = Registry.ClassesRoot.GetSubKeyNames();
-            List<FileType> fileTypes = new List<FileType>();
-            for (int i = 0; i < types.Length; i++)
+            var fileTypes = new List<FileType>();
+            foreach (string t in types)
             {
-                if (string.IsNullOrEmpty(types[i]))
+                if (string.IsNullOrEmpty(t))
                     continue;
 
-                if (types[i].IndexOf(".") != 0)
+                if (t.IndexOf(".", StringComparison.Ordinal) != 0)
                     continue;
 
-                RegistryKey key = OpenKey(types[i]);
-                if (key == null)
-                    continue;
+                var key = OpenKey(t);
 
-                var val = key.GetValue("Content Type");
+                var val = key?.GetValue("Content Type");
                 if (val != null)
-                    fileTypes.Add(new FileType { ContentType = val.ToString(), Extension = types[i] });
+                    fileTypes.Add(new FileType { ContentType = val.ToString(), Extension = t });
             }
 
             return fileTypes;
@@ -41,7 +38,7 @@ namespace GrepperLib.Domain
 
         private RegistryKey OpenKey(string path)
         {
-            RegistryKey key = null;
+            RegistryKey key;
             try
             {
                 key = Registry.ClassesRoot.OpenSubKey(path);

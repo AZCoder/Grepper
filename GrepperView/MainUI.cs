@@ -21,7 +21,7 @@ namespace GrepperView
         private readonly FileController _fileController;
         private readonly ISettings _settings;
         private Settings _appSettings;
-        private static BackgroundWorker workerThread;
+        private static BackgroundWorker _workerThread;
 
         #endregion
         #region Constructor____________
@@ -41,7 +41,7 @@ namespace GrepperView
             _fileController = new FileController();
             _settings = new SettingsManager();
 
-            this.ActiveControl = ddlSearchCriteria;
+            ActiveControl = ddlSearchCriteria;
 
             // set tool tips
             SetToolTips();
@@ -65,7 +65,7 @@ namespace GrepperView
                 return;
             }
             
-            using (LinearGradientBrush brush = new LinearGradientBrush(ClientRectangle, Color.White, Color.LightSteelBlue, 90F))
+            using (var brush = new LinearGradientBrush(ClientRectangle, Color.White, Color.LightSteelBlue, 90F))
             {
                 e.Graphics.FillRectangle(brush, ClientRectangle);
             }
@@ -86,15 +86,16 @@ namespace GrepperView
         /// <param name="e"></param>
         protected void FileMatches_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            string itemSelected = lvwFileMatches.SelectedItems[0].Text;
+            var itemSelected = lvwFileMatches.SelectedItems[0].Text;
             var fileMatch = from match in _fileController.FileDataList
                             where match.FilePath == itemSelected
                             select match;
 
-            if (fileMatch == null || fileMatch.Count() < 1)
+            var fileDatas = fileMatch as IList<FileData> ?? fileMatch.ToList();
+            if (!fileDatas.Any())
                 return;
 
-            using (Process proc = new Process() { StartInfo = new ProcessStartInfo(fileMatch.First().FilePath) })
+            using (var proc = new Process() { StartInfo = new ProcessStartInfo(fileDatas.First().FilePath) })
             {
                 proc.Start();
             }
@@ -130,7 +131,7 @@ namespace GrepperView
         /// </summary>
         protected void BaseSearchPath_Click(object sender, EventArgs e)
         {
-            DirectoryBrowser db = new DirectoryBrowser()
+            var db = new DirectoryBrowser()
             {
                 StartDirectory = txtBaseSearchPath.Text.Trim()
             };
@@ -149,15 +150,15 @@ namespace GrepperView
         protected void FileMatches_MouseClick(object sender, MouseEventArgs e)
         {
             lvwLineData.Items.Clear();
-            string itemSelected = lvwFileMatches.SelectedItems[0].Text;
+            var itemSelected = lvwFileMatches.SelectedItems[0].Text;
             var fileMatch = (from match in _fileController.FileDataList
                              where match.FilePath == itemSelected
                              select match.LineDataList).FirstOrDefault();
 
-            if (fileMatch == null || fileMatch.Count() < 1) return;
-            foreach (KeyValuePair<long, string> item in fileMatch)
+            if (fileMatch == null || !fileMatch.Any()) return;
+            foreach (var item in fileMatch)
             {
-                ListViewItem lvi = new ListViewItem(new string[] { item.Key.ToString(), item.Value });
+                var lvi = new ListViewItem(new[] { item.Key.ToString(), item.Value });
                 lvwLineData.Items.Add(lvi);
             }
 
@@ -166,7 +167,7 @@ namespace GrepperView
 
         protected void Extensions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ExtensionsUI extensions = new ExtensionsUI();
+            var extensions = new ExtensionsUI();
             extensions.ShowDialog();
             LoadSettings();
         }
@@ -176,9 +177,9 @@ namespace GrepperView
 
         private void CopyToClipboard()
         {
-            string itemSelected = string.Empty;
-            string message = string.Empty;
-            UMessage.Message.MessageStatus status = UMessage.Message.MessageStatus.Success;
+            var itemSelected = string.Empty;
+            string message;
+            var status = UMessage.Message.MessageStatus.Success;
 
             if (IsLineDataSelectedValid())
                 itemSelected = lvwLineData.SelectedItems[0].SubItems[1].Text;
@@ -191,7 +192,7 @@ namespace GrepperView
             else
             {
                 Clipboard.SetText(itemSelected);
-                message = string.Format("Copied line {0} to clipboard", lvwLineData.SelectedItems[0].Text);
+                message = $"Copied line {lvwLineData.SelectedItems[0].Text} to clipboard";
             }
             DisplayMessage(message, status);
         }
@@ -258,12 +259,12 @@ namespace GrepperView
         private void EvokeSearchThread()
         {
             // create background worker thread to perform search so that UI does not lock up
-            workerThread = new BackgroundWorker();
-            workerThread.DoWork += WorkerThread_DoWork;
-            workerThread.RunWorkerCompleted += WorkerThread_RunWorkerCompleted;
+            _workerThread = new BackgroundWorker();
+            _workerThread.DoWork += WorkerThread_DoWork;
+            _workerThread.RunWorkerCompleted += WorkerThread_RunWorkerCompleted;
 
             // start the thread
-            workerThread.RunWorkerAsync(_fileController);
+            _workerThread.RunWorkerAsync(_fileController);
         }
 
         /// <summary>
@@ -274,7 +275,7 @@ namespace GrepperView
         private void WorkerThread_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // obtain results from worker thread and update UI as necessary
-            FileController fc = (FileController)e.Result;
+            var fc = (FileController)e.Result;
             if (fc.FileDataList == null)
                 return;
 
@@ -282,9 +283,9 @@ namespace GrepperView
             DisplayErrors();
             DisplaySearchResultMessage(fc.FileDataList, fc.TotalMatches);
 
-            foreach (FileData fd in fc.FileDataList)
+            foreach (var fd in fc.FileDataList)
             {
-                lvwFileMatches.Items.Add(new ListViewItem(new string[] { fd.FilePath, fd.LineDataList.Count.ToString() }));
+                lvwFileMatches.Items.Add(new ListViewItem(new[] { fd.FilePath, fd.LineDataList.Count.ToString() }));
             }
 
             // set row colors and disable progressBar & timer
@@ -296,16 +297,15 @@ namespace GrepperView
         private void DisplaySearchResultMessage(IList<FileData> results, int count)
         {
             string message = string.Empty;
-            UMessage.Message.MessageStatus status = UMessage.Message.MessageStatus.Success;
+            var status = UMessage.Message.MessageStatus.Success;
             if (results == null || results.Count < 1)
             {
-                message = "No results found.";
                 status = UMessage.Message.MessageStatus.Warning;
             }
             
-            string matches = count == 1 ? "" : "es";
-            string files = results.Count == 1 ? "" : "s";
-            message = string.Format("{0} match{1} in {2} file{3}", count, matches, results.Count, files);
+            var matches = count == 1 ? "" : "es";
+            var files = results != null && results.Count == 1 ? "" : "s";
+            if (results != null) message = $"{count} match{matches} in {results.Count} file{files}";
 
             DisplayMessage(message, status);
         }
@@ -315,9 +315,9 @@ namespace GrepperView
             if (UMessage.Message.MessageList == null)
                 return;
 
-            foreach (string error in UMessage.Message.MessageList)
+            foreach (var error in UMessage.Message.MessageList)
             {
-                ListViewItem item = new ListViewItem(new string[] { error, "Error" })
+                var item = new ListViewItem(new[] { error, "Error" })
                 {
                     ForeColor = Color.Red
                 };
@@ -346,7 +346,7 @@ namespace GrepperView
         /// <param name="e"></param>
         private void WorkerThread_DoWork(object sender, DoWorkEventArgs e)
         {
-            FileController fc = (FileController)e.Argument;
+            var fc = (FileController)e.Argument;
             fc.GenerateFileData();
 
             e.Result = fc;
@@ -354,7 +354,7 @@ namespace GrepperView
 
         private void SaveExtensions()
         {
-            List<string> extensionList = new List<string>();
+            var extensionList = new List<string>();
             if (!ddlFileExtensions.Items.Contains(ddlFileExtensions.Text))
                 ddlFileExtensions.Items.Add(ddlFileExtensions.Text);
 
@@ -371,10 +371,10 @@ namespace GrepperView
             if (ddlSearchCriteria.Text.Length < 1)
                 return;
 
-            string searchTerm = ddlSearchCriteria.Text;
+            var searchTerm = ddlSearchCriteria.Text;
 
             // rebuild ddlSearchCriteria.Items without the search term (in case it already exists), then insert search term into first place
-            List<string> itemList = new List<string>();
+            var itemList = new List<string>();
             foreach (string item in ddlSearchCriteria.Items)
             {
                 if (item != searchTerm) itemList.Add(item);
@@ -440,9 +440,8 @@ namespace GrepperView
         private void SetTitleBar()
         {
             // set app version on titlebar
-            Text = string.Format("GREPPER v{0}.{1}.{2}", Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Major,
-                                                         Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Minor,
-                                                         Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Build);
+            Text =
+                $@"GREPPER v{Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Major}.{Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Minor}.{Assembly.GetAssembly(_fileController.GetType()).GetName().Version.Build}";
         }
 
         /// <summary>

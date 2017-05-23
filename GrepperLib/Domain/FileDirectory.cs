@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
-using System.Text;
 
 namespace GrepperLib.Domain
 {
@@ -10,18 +9,12 @@ namespace GrepperLib.Domain
     {
         protected static readonly string _cleanRootPathPattern = "^[a-zA-Z][:]{1}";
 
-        public static string GetRootPathPattern
-        {
-            get
-            {
-                return _cleanRootPathPattern;
-            }
-        }
+        public static string GetRootPathPattern => _cleanRootPathPattern;
 
         public string GetPathAtLoadup(IList<string> arguments)
         {
             string path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            if (arguments.Count() < 1)
+            if (!arguments.Any())
                 return path;
 
             string argPath = arguments.First();
@@ -34,7 +27,7 @@ namespace GrepperLib.Domain
 
         protected string CleanRootPath(string path)
         {
-            Regex regPattern = new Regex(_cleanRootPathPattern);
+            var regPattern = new Regex(_cleanRootPathPattern);
             if (regPattern.Matches(path.Substring(0, 2)).Count < 1)
             {
                 return path;
@@ -42,7 +35,7 @@ namespace GrepperLib.Domain
 
             if (path.Substring(2, 1) == "\"")
             {
-                path = string.Format("{0}\\", path.Substring(0, 2));
+                path = $"{path.Substring(0, 2)}\\";
             }
 
             return path;
