@@ -9,7 +9,7 @@ can do the same thing internally, although in some cases it may prove easier to 
 
 The UI display results in 2 grids. The upper grid shows one row per file where a match was found, including the number of matches.
 Clicking on that row will populate the lower grid with each line that contains the search term. Double clicking on an upper grid
-line will cause the app to attempt opening the default app for the file type, so a txt file would open in Notepad, Notepadd++, or whatever
+line will cause the app to attempt opening the default app for the file type, so a txt file would open in Notepad, Notepad++, or whatever
 default is set. Right clicking on a row in the lower grid will copy that line to the clipboard. This can be useful when you are
 trying to see how you resolved a coding problem before, and just want to copy and paste the line into your editor to make it easier
 to work on the current piece.
