@@ -7,7 +7,7 @@ it to work with projects without an IDE (specifically PHP projects and Arma 2 SQ
 in all files fitting the extension pattern. This fulfills the duties that are carried out by major IDE's such as Visual Studio that
 can do the same thing internally, although in some cases it may prove easier to do via this tool.
 
-The UI display results in 2 grids. The upper grid shows one row per file were a match was found, including the number of matches.
+The UI display results in 2 grids. The upper grid shows one row per file where a match was found, including the number of matches.
 Clicking on that row will populate the lower grid with each line that contains the search term. Double clicking on an upper grid
 line will cause the app to attempt opening the default app for the file type, so a txt file would open in Notepad, Notepadd++, or whatever
 default is set. Right clicking on a row in the lower grid will copy that line to the clipboard. This can be useful when you are
